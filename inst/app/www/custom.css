@@ -1,0 +1,277 @@
+ 
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&family=Inter:wght@400;600&family=Sansita+Swashed:wght@600&display=swap');
+
+
+/* Here, I will define special classes for some elements */
+/* Class 1: Titles of each tab page */
+.title-header {
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Class 2: Appearance of search buttons and download buttons */
+.search-button {
+    color: #fff;
+    vertical-align: middle;
+    background-color: #196F3D;
+    border-color: #196F3D;
+    margin-top: 15px;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    height: 50px;
+    z-index: 5;
+    white-space: nowrap;
+}
+
+.search-button2 {
+    color: #fff;
+    vertical-align: middle;
+    background-color: #196F3D;
+    border-color: #196F3D;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    height: 40px;
+    z-index: 5;
+    white-space: nowrap;
+}
+
+.download-button {
+    color: #fff;
+    vertical-align: middle;
+    background-color: #567da5;
+    border-color: #567da5;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    height: 40px;
+    z-index: 5;
+    white-space: nowrap;
+}
+
+/* Class 3: smaller font size (12px) for some buttons */
+.font-small {
+    font-size: 12px;
+}
+
+/* Customize infoBoxes */
+.info-box-text, .progress-description {
+    display: block;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: inherit; 
+    text-overflow: ellipsis;
+}
+
+.info-box-number {
+    display: block;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.info-box {
+    display: block;
+    min-height: 90px;
+    background: #fff;
+    width: 100%;
+    box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
+    border-radius: 2px;
+    margin-bottom: 15px;
+}
+
+.info-box-icon {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 2px;
+    display: block;
+    float: left;
+    height: 80px;
+    width: 90px;
+    text-align: center;
+    font-size: 45px;
+    line-height: 80px;
+    background: rgba(0,0,0,.2);
+}
+
+/* Make header 6 (h6) a special header for sections inside boxes 
+(mainly "Download options" boxes)
+*/
+
+h6 {
+    font-family: 'Atkinson Hyperlegible';
+    font-weight: bold;
+    font-size: 15px;
+    color: #444;
+}
+
+h6:after {
+    content:' ';
+    display: block;
+    border: 0.8px solid #666;
+}
+
+/* Default font: Atkinson Hyperlegible (for better accessibility) */
+body, 
+h1, 
+h2, 
+h3, 
+h4,
+h5 {
+    font-family: 'Atkinson Hyperlegible';
+}
+
+body {
+    font-size: 15px;
+}
+
+/* Sidebar font options */
+.skin-green .sidebar a {
+    color: #353e36;
+    font-family: 'Inter';
+    font-weight: bold;
+}
+
+/* Sidebar color */
+.skin-green .sidebar, 
+.skin-green .wrapper,
+.skin-green .main-sidebar {
+    background-color: #c1cfc1;
+}
+
+/* Color of sidebar buttons when active and on hover */
+.skin-green .sidebar-menu > li.active > a,
+.skin-green .sidebar-menu > li:hover > a {
+    background: #276c4c;
+}
+
+/* Remove thin bar on left side of active buttons in the side bar*/
+.skin-green .sidebar-menu > li > a {
+    border-left: 0px;
+}
+
+/* 'Logo' color (above the sidebar, where the app name is) */
+.skin-green .main-header .logo {
+    background-color: #276c4c;
+    color: #fff;
+    font-size: 16px;
+    border-bottom: 0 solid transparent;
+}
+
+/* Navbar color */
+.skin-green .main-header .navbar {
+    background-color: #276c4c;
+}
+
+/* Change header color of 'success' box */ 
+.box.box-solid.box-success>.box-header {
+    color: #fff;
+    background: #276c4c;
+    background-color: #276c4c;
+}
+
+
+/*
+ * Component: Sidebar Mini
+ */
+@media (min-width: 768px) {
+  .sidebar-mini.sidebar-collapse .content-wrapper,
+  .sidebar-mini.sidebar-collapse .right-side,
+  .sidebar-mini.sidebar-collapse .main-footer {
+    margin-left: 50px !important;
+    z-index: 840;
+  }
+  /*.sidebar-mini.sidebar-collapse .main-header .logo > .logo-mini:before {
+      content: "SEA";
+  } */
+  .sidebar-mini.sidebar-collapse .main-header .logo > .logo-lg {
+      display: none;
+  }
+  .sidebar-mini.sidebar-collapse .main-header .logo > .logo-mini {
+      display: block;
+      margin-left: -15px;
+      margin-right: -15px;
+      font-size: 18px;
+  }
+  .sidebar-mini.sidebar-collapse .main-sidebar {
+    -webkit-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    -o-transform: translate(0, 0);
+    transform: translate(0, 0);
+    width: 50px !important;
+    z-index: 850;
+  }
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li {
+      position: relative;
+  }
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li > a {
+      margin-right: 0;
+  }
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li > a > span {
+      border-top-right-radius: 4px;
+  }
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li:not(.treeview) > a > span {
+      border-bottom-right-radius: 4px;
+  }
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom-right-radius: 4px;
+  }
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right),
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
+    display: block !important;
+    position: absolute;
+    width: 180px;
+    left: 50px;
+  }
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span {
+    top: 0;
+    margin-left: -3px;
+    padding: 12px 5px 12px 20px;
+    background-color: inherit;
+  }
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > .pull-right-container {
+    position: relative!important;
+    float: right;
+    width: auto!important;
+    left: 180px !important;
+    top: -22px !important;
+    z-index: 900;
+  }
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > .pull-right-container > .label:not(:first-of-type) {
+    display: none;
+  }
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
+    top: 44px;
+    margin-left: 0;
+  }
+  .sidebar-mini.sidebar-collapse .main-sidebar .user-panel > .info,
+  .sidebar-mini.sidebar-collapse .sidebar-form,
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li > a > span,
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu,
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li > a > .pull-right,
+  .sidebar-mini.sidebar-collapse .sidebar-menu li.header {
+    display: none !important;
+    -webkit-transform: translateZ(0);
+  }
+  .sidebar-mini.sidebar-collapse .main-header .logo {
+    width: 50px;
+  }
+  .sidebar-mini.sidebar-collapse .main-header .logo > .logo-mini {
+    display: block;
+    margin-left: -15px;
+    margin-right: -15px;
+    font-size: 18px;
+  }
+  .sidebar-mini.sidebar-collapse .main-header .logo > .logo-lg {
+    display: none;
+  }
+  .sidebar-mini.sidebar-collapse .main-header .navbar {
+    margin-left: 50px;
+  }
+}
+
