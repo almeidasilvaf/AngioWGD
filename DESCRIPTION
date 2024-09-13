@@ -1,0 +1,60 @@
+Package: AngioWGD
+Title: A Shiny app to explore whole-genome duplication events in angiosperms
+Version: 1.0.6
+Authors@R: 
+    c(
+    person(given = "Fabrício",
+           family = "Almeida-Silva",
+           role = c("aut", "cre"),
+           email = "fabricio_almeidasilva@hotmail.com",
+           comment = c(ORCID = "0000-0002-5314-2964")),
+    person(given = "Henghchi",
+           family = "Chen",
+           role = "aut",
+           comment = c(ORCID = "0000-0003-1173-6622"))
+    )
+Description: This package contains a Shiny app where users can explore
+    whole-genome duplication (WGD) events in angiosperms, their dates,
+    and phylogenetic positions. Users can visualize WGD events for clades
+    of interest, download data, and explore posterior distributions for WGD
+    ages for all WGD events in 466 angiosperm species.
+License: GPL-3
+Imports: 
+    config (>= 0.3.1),
+    deeptime (>= 2.0.0.9000),
+    ggtree (>= 3.12.0),
+    shinydashboardPlus (>= 2.0.5),
+    geomtextpath (>= 0.1.4),
+    ggsci (>= 3.2.0),
+    grid,
+    shinyWidgets (>= 0.8.6),
+    stats,
+    utils,
+    tools,
+    grDevices,
+    DT (>= 0.33),
+    ggplot2 (>= 3.5.1),
+    golem (>= 0.3.1),
+    shiny (>= 1.6.0),
+    shinydashboard (>= 0.7.2),
+    dplyr (>= 1.1.4),
+    tidyr (>= 1.3.1),
+    stringr (>= 1.5.1),
+    rlang (>= 1.1.4),
+    plotly (>= 4.10.4),
+    scales (>= 1.3.0),
+    xml2 (>= 1.3.6),
+    shinycssloaders (>= 1.0.0),
+    htmltools (>= 0.5.8.1),
+    shinyjs (>= 2.1.0),
+    metathis (>= 1.1.4)
+Encoding: UTF-8
+LazyData: true
+LazyDataCompression: xz
+RoxygenNote: 7.3.2
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Language: en-US
+Depends: 
+    R (>= 4.2)
