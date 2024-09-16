@@ -225,4 +225,92 @@ data_urls <- species_metadata |>
 usethis::use_data(data_urls, compress = "xz")
 ```
 
+## posterior_ages.rda
+
+This object contains a data frame in long format with posterior
+distributions for WGD ages. Original data files were obtained from [this
+Google Drive
+folder](https://drive.google.com/drive/folders/1rOR5e7w95DcMNa6nfRRBTiPAGRdU_Fg3?usp=sharing).
+Once I downloaded the entire folder as a .zip file to my `Downloads/`
+directory, I extracted it and used the following code to parse the files
+programatically:
+
+``` r
+# Iterate through each subfolder (one for each WGD event) and extract distros
+dirs <- dir("~/Downloads/wgd_posterior_distros", full.names = TRUE)
+distros <- lapply(dirs, function(x) {
+    
+    ## Get path to files that match pattern
+    files <- list.files(
+        file.path(x, "MainTree"), 
+        full.names = TRUE, pattern = "_date.txt"
+    )
+    
+    final_df <- NULL
+    if(length(files) >0) {
+        ## Read files as a data frame
+        df <- Reduce(cbind, lapply(files, read.table, header = TRUE))
+        colnames(df) <- gsub("_date.*", "", basename(files))
+        df$WGD_ID <- basename(x)
+        
+        ## Reshape it to long format
+        final_df <- df |>
+            tidyr::pivot_longer(!WGD_ID, names_to = "species", values_to = "age") |>
+            as.data.frame()
+    } else {
+        warning("No date files were found for WGD ", basename(x))
+    }
+    
+    return(final_df)
+})
+
+# Create a long data frame with WGD ID, species, and age
+posterior_ages <- Reduce(rbind, distros) |>
+    mutate(
+        WGD_ID = factor(WGD_ID),
+        species = str_replace_all(species, "Pisum_sativm", "Pisum_sativum"),
+        species = str_replace_all(
+            species, "^(\\w)\\w+_(\\w+)$", "\\1\\2"
+        ),
+        species = factor(species),
+        age = age * 100
+    )
+
+# Pre-compute plot data for the histogram
+compute_histogram_data <- function(data, bins = 30) {
+    
+    histogram_data <- data |>
+        summarise(
+            hist_data = list(hist(age, breaks = bins, plot = FALSE)),
+            total_count = n(),
+            .groups = "drop"
+        ) |>
+        mutate(
+            xmin = map(hist_data, \(x) x$breaks[-length(x$breaks)]),
+            xmax = map(hist_data, \(x) x$breaks[-1]),
+            mids = map(hist_data, \(x) x$mids),
+            counts = map(hist_data, \(x) x$counts)
+        ) |>
+        select(-hist_data) |>
+        unnest(cols = c(xmin, xmax, mids, counts)) |>
+        mutate(density = counts / total_count / (xmax - xmin))
+        
+    return(histogram_data)
+}
+
+## Histograms for each WGD and species
+hist_data <- posterior_ages |>
+    group_by(WGD_ID, species) |>
+    compute_histogram_data()
+
+hist_data_all <- posterior_ages |>
+    group_by(WGD_ID) |>
+    compute_histogram_data()
+
+posterior_hist <- list(byspecies = hist_data, combined = hist_data_all) 
+
+# Save data
+usethis::use_data(posterior_hist, compress = "xz")
+```
+
 # Data in `inst/extdata/`

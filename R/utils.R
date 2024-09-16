@@ -184,3 +184,79 @@ subset_wgd_per_clade <- function(wgd_table, metadata, clade) {
 }
 
 
+#' Choose color palette automatically based on the number of levels
+#'
+#' @param lev A character vector of levels to which unique colors should 
+#' be mapped.
+#' 
+#' @return A character vector of colors for each unique element of \strong{lev}.
+#' @importFrom grDevices gray.colors
+#' @noRd
+pal_auto <- function(lev) {
+    
+    len <- length(unique(lev))
+    
+    # Default palette: Set2 from RColorBrewer
+    pal <- c(
+        "#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", 
+        "#FFD92F", "#E5C494", "#B3B3B3"
+    )
+    
+    if(len >8 & len <=12) {
+        # Set3 from RColorBrewer for 9<n<=12 elements
+        pal <- c(
+            "#8DD3C7", "#FFFFB3", "#BEBADA", "#FB8072", "#80B1D3", "#FDB462", 
+            "#B3DE69", "#FCCDE5", "#D9D9D9", "#BC80BD", "#CCEBC5", "#FFED6F"
+        )
+    } else if(len >12 & len<=20) {
+        # D3's category 20 for n>12
+        pal <- c(
+            "#1F77B4FF", "#FF7F0EFF", "#2CA02CFF", "#D62728FF", "#9467BDFF", 
+            "#8C564BFF", "#E377C2FF", "#7F7F7FFF", "#BCBD22FF", "#17BECFFF", 
+            "#AEC7E8FF", "#FFBB78FF", "#98DF8AFF", "#FF9896FF", "#C5B0D5FF", 
+            "#C49C94FF", "#F7B6D2FF", "#C7C7C7FF", "#DBDB8DFF", "#9EDAE5FF"
+        )
+    } else if(len >20) {
+        pal <- grDevices::hcl.colors(len)
+    }
+    
+    pal <- pal[seq_len(len)]
+    
+    return(pal)
+}
+
+
+#' Create density data from pre-computed histogram data
+#'
+#' @param hdata A data frame with pre-computed histogram statistics,
+#' including columns `xmin`, `xmax`, `mids`, `counts`, and `density`.
+#'
+#' @return A data frame with x and y coordinates of the density line to plot.
+#' @noRd
+#' @examples
+#' data(posterior_hist)
+#' 
+#' hdata <- posterior_hist$byspecies |> dplyr::filter(WGD_ID == "MUSA_beta")
+#' hist2dens(hdata)
+hist2dens <- function(hdata, byspecies = TRUE) {
+
+    if(byspecies) {
+        hdata_split <- split(hdata, as.character(hdata$species))
+        dens_df <- Reduce(rbind, lapply(hdata_split, function(x) {
+            d <- density(rep(x$mids, times = x$counts), 1)
+            df <- data.frame(
+                WGD_ID = x$WGD_ID[1], species = x$species[1],
+                x = d$x, y = d$y
+            )
+            return(df)
+        }))
+        
+    } else {
+        d <- density(rep(hdata$mids, times = hdata$counts), 1)
+        dens_df <- data.frame(
+            WGD_ID = hdata$WGD_ID[1], x = d$x, y = d$y
+        )
+    }
+    
+    return(dens_df)
+}
