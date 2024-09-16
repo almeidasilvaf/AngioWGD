@@ -6,6 +6,7 @@ utils::globalVariables(
         "species_metadata",
         "wgd_dates",
         "available_clades",
-        "data_urls"
+        "data_urls",
+        "posterior_hist"
     )
 )
