@@ -19,9 +19,11 @@ mod_original_data_ui <- function(id){
                   DT::dataTableOutput(ns("species_table")),
                   color = "#276c4c"
               ),
+              hr(),
               helpText(
                   "Explore taxonomic information for all species", 
-                  "included in this resource."
+                  "included in this resource and download FASTA and GFF3 files",
+                  "with CDS and gene annotation, respectively."
               )
           )
       )
