@@ -137,6 +137,7 @@ mod_explore_wgd_events_ui <- function(id) {
                     shiny::plotOutput(ns("tree_viz"), height = "800px"),
                     color = "#276c4c"
                 ),
+                hr(),
                 helpText(
                     "Rectangles indicate the HPD region of the WGD dates."
                 )
@@ -157,6 +158,7 @@ mod_explore_wgd_events_ui <- function(id) {
                         label = "Highlight selected WGD events"
                     )
                 )),
+                hr(),
                 helpText(
                     "Explore date statistics for each WGD event."
                 ),
