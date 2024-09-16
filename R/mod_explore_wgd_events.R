@@ -317,12 +317,13 @@ mod_explore_wgd_events_server <- function(id) {
             p
         })
         
-        # Render plot with phylogenetic tree
+        # Render UI elements ----
+        ## Render plot with phylogenetic tree
         output$tree_viz <- renderPlot({
             treeplot()
         }, res = 96)
         
-        # Render interactive table with WGD dates
+        ## Render interactive table with WGD dates
         output$wgd_table <- DT::renderDataTable({
             
             DT::datatable(
@@ -356,7 +357,7 @@ mod_explore_wgd_events_server <- function(id) {
             w
         })
         
-        # Download figure with tree to PDF/SVG file ----
+        ## Download figure with tree to PDF/SVG file
         output$download_fig <- downloadHandler(
             filename = function() {
                 paste0("tree_with_WGD_events_", input$input_clade, input$figformat)
@@ -369,7 +370,7 @@ mod_explore_wgd_events_server <- function(id) {
             }
         )
         
-        # Download table with WGD dates
+        ## Download table with WGD dates
         output$download_table <- downloadHandler(
             filename = function() {
                 paste0("wgd_dates_", input$input_clade, input$tableformat)

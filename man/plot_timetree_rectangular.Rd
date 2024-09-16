@@ -7,7 +7,6 @@
 plot_timetree_rectangular(
   tree,
   metadata,
-  color_by = "taxonomy_3",
   pointsize = 2,
   pointalpha = 0.8,
   add_labels = FALSE,
@@ -20,10 +19,6 @@ plot_timetree_rectangular(
 
 \item{metadata}{A data frame of species metadata (e.g., taxonomic 
 information and any other relevant variables describing species).}
-
-\item{color_by}{Character indicating which column of the data frame
-in \strong{metadata} should be used to color tip points. 
-Default: "taxonomy_3".}
 
 \item{pointsize}{Numeric indicating the size of the point 
 in `ggtree::geom_tippoint()`. Default: 2.}

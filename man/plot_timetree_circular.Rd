@@ -7,7 +7,6 @@
 plot_timetree_circular(
   tree,
   metadata,
-  color_by = "taxonomy_3",
   periods_alpha = 0.4,
   add_labels = FALSE,
   label_size = 1.4
@@ -18,9 +17,6 @@ plot_timetree_circular(
 
 \item{metadata}{A data frame with taxonomic information for each
 tip in \strong{tree}.}
-
-\item{color_by}{Character indicating the name of the column 
-in \strong{metadata} to use when coloring tip points.}
 
 \item{periods_alpha}{Numeric indicating the alpha aesthetic of the colors
 inside the tree used to represent geological periods.}

@@ -1,11 +1,10 @@
 
+
 #' Plot a timetree for angiosperms in circular layout
 #'
 #' @param tree A `phylo` object with a species tree.
 #' @param metadata A data frame with taxonomic information for each
 #' tip in \strong{tree}.
-#' @param color_by Character indicating the name of the column 
-#' in \strong{metadata} to use when coloring tip points.
 #' @param periods_alpha Numeric indicating the alpha aesthetic of the colors
 #' inside the tree used to represent geological periods.
 #' @param add_labels Logical indicating whether or not to add labels to tips
@@ -19,6 +18,7 @@
 #' @importFrom ggplot2 scale_y_continuous scale_x_continuous theme_minimal
 #' @import ggplot2
 #' @importFrom geomtextpath geom_textpath
+#' @importFrom ape node.depth.edgelength
 #' @importFrom deeptime coord_geo_radial guide_geo
 #' @rdname plot_timetree_circular
 #' @examples
@@ -27,11 +27,14 @@
 #' metadata <- species_metadata
 #' plot_timetree_circular(tree, species_metadata, color_by = "taxonomy_3")
 plot_timetree_circular <- function(
-        tree, metadata, color_by = "taxonomy_3", 
+        tree, metadata, 
         periods_alpha = 0.4,
         add_labels = FALSE,
         label_size = 1.4
 ) {
+    
+    color_by <- tree_taxon_auto(tree, metadata)
+    xmin <- round(max(ape::node.depth.edgelength(tree)) + 20, -1)
     
     # Define period boundaries and colors
     age_breaks <- c(201.4, 145.0, 66.0, 23.03)
@@ -56,7 +59,7 @@ plot_timetree_circular <- function(
                 guide_axis(),
                 spacing = unit(0, "line")
             ),
-            limits = if(add_labels) c(-230, 80) else c(-230, 0), 
+            limits = if(add_labels) c(-xmin, 80) else c(-xmin, 0) 
         ) +
         scale_y_continuous(guide = NULL, expand = expansion(mult = c(0.005, 0.01))) +
         theme_classic() +
@@ -82,9 +85,6 @@ plot_timetree_circular <- function(
 #' @param tree A `phylo` object with an ultrametric tree.
 #' @param metadata A data frame of species metadata (e.g., taxonomic 
 #' information and any other relevant variables describing species).
-#' @param color_by Character indicating which column of the data frame
-#' in \strong{metadata} should be used to color tip points. 
-#' Default: "taxonomy_3".
 #' @param xlim Numeric vector of length 2 indicating the x-axis limits.
 #' Default: \code{c(-220, 2)}.
 #' @param pointsize Numeric indicating the size of the point 
@@ -110,14 +110,16 @@ plot_timetree_circular <- function(
 #' data(species_metadata)
 #' p <- plot_timetree_rectangular(tree, species_metadata)
 plot_timetree_rectangular <- function(
-        tree, metadata, color_by = "taxonomy_3", 
+        tree, metadata,
         pointsize = 2, pointalpha = 0.8, 
         add_labels = FALSE,
         label_size = 1.4,
         ...
 ) {
     
+    color_by <- tree_taxon_auto(tree, metadata)
     age_breaks <- c(300, 201.4, 145.0, 66.0, 23.03)
+    xmin <- round(max(ape::node.depth.edgelength(tree)) + 20, -1)
     
     # Get circular tree with chronostratigraphic info
     p <- revts(ggtree(tree)) %<+% metadata +
@@ -130,7 +132,7 @@ plot_timetree_rectangular <- function(
             abbrv = TRUE, 
             alpha = 0.6, 
             expand = TRUE,
-            xlim = if(add_labels) c(-230, 60) else c(-230, 0), 
+            xlim = if(add_labels) c(-xmin, 60) else c(-xmin, 0), 
             ...
         ) +
         scale_x_continuous(
@@ -243,3 +245,23 @@ add_wgd_rects <- function(p, tree, wgd_dates, rh = 0.25, highlight = NULL) {
 }
 
 
+#' Helper to automatically choose the taxon to color by when plotting trees
+#'
+#' @param tree A `phylo` object with an ultrametric tree.
+#' @param metadata A data frame of species metadata (e.g., taxonomic 
+#' information and any other relevant variables describing species).
+#' 
+#' @return Character scalar with the name of the column in \strong{metadata}
+#' to use for coloring. 
+#' @noRd
+tree_taxon_auto <- function(tree, metadata) {
+    
+    # Count number of levels per taxon
+    fmeta <- metadata[metadata$latin_name %in% tree$tip.label, ]
+    tcount <- apply(fmeta[, c("family", "order", "taxonomy_3")], 2, function(x) length(unique(x)))
+    
+    # Choose first taxon with <20 levels
+    taxon <- names(tcount[tcount <=20][1])
+    
+    return(taxon)
+}
