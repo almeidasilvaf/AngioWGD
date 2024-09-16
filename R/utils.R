@@ -236,14 +236,14 @@ pal_auto <- function(lev) {
 #' @examples
 #' data(posterior_hist)
 #' 
-#' hdata <- posterior_hist$byspecies |> dplyr::filter(WGD_ID == "MUSA_beta")
+#' hdata <- posterior_hist$byspecies |> dplyr::filter(WGD_ID == "JUGL")
 #' hist2dens(hdata)
 hist2dens <- function(hdata, byspecies = TRUE) {
 
     if(byspecies) {
         hdata_split <- split(hdata, as.character(hdata$species))
         dens_df <- Reduce(rbind, lapply(hdata_split, function(x) {
-            d <- density(rep(x$mids, times = x$counts), 1)
+            d <- density(rep(x$mids, times = x$counts), bw = 2.5)
             df <- data.frame(
                 WGD_ID = x$WGD_ID[1], species = x$species[1],
                 x = d$x, y = d$y
@@ -252,7 +252,7 @@ hist2dens <- function(hdata, byspecies = TRUE) {
         }))
         
     } else {
-        d <- density(rep(hdata$mids, times = hdata$counts), 1)
+        d <- density(rep(hdata$mids, times = hdata$counts), bw = 2.5)
         dens_df <- data.frame(
             WGD_ID = hdata$WGD_ID[1], x = d$x, y = d$y
         )

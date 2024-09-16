@@ -11,7 +11,7 @@
 #' @examples
 #' data(posterior_hist)
 #' 
-#' hist_data <- posterior_hist$byspecies |> dplyr::filter(WGD_ID == "MUSA_beta")
+#' hist_data <- posterior_hist$byspecies |> dplyr::filter(WGD_ID == "JUGL")
 #' p <- plot_age_distro(hist_data)
 plot_age_distro <- function(hist_data) {
     
@@ -35,14 +35,15 @@ plot_age_distro <- function(hist_data) {
         ) +
         theme_classic() +
         labs(
-            title = paste0("Posterior distributions of WGD age for WGD '", wgd_id, "'"),
+            title = paste0("Age distributions for WGD '", wgd_id, "'"),
             x = "Time (in million years ago)",
             y = "Density",
             fill = "Species", color = "Species"
         ) +
         scale_fill_manual(values = pal_auto(species)) +
         scale_color_manual(values = pal_auto(species)) +
-        scale_y_continuous(expand = c(0.001, 0.001))
+        scale_y_continuous(expand = c(0.001, 0.001)) +
+        scale_x_continuous(breaks = seq(0, 120, by = 20), expand = c(0.001, 0.001))
     
     # Handle legend
     nsp <- length(species)
@@ -69,7 +70,7 @@ plot_age_distro <- function(hist_data) {
 #' @examples
 #' data(posterior_hist)
 #' 
-#' hist_data <- posterior_hist$combined |> dplyr::filter(WGD_ID == "MUSA_beta")
+#' hist_data <- posterior_hist$combined |> dplyr::filter(WGD_ID == "JUGL")
 #' p <- plot_consensus_age_distro(hist_data)
 plot_consensus_age_distro <- function(hist_data) {
     
@@ -94,11 +95,12 @@ plot_consensus_age_distro <- function(hist_data) {
         ) +
         theme_classic() +
         labs(
-            title = paste0("Consensus posterior distribution of WGD age for WGD '", wgd_id, "'"),
+            title = paste0("Consensus age distribution for WGD '", wgd_id, "'"),
             x = "Time (in million years ago)",
             y = "Density"
         ) +
-        scale_y_continuous(expand = c(0.001, 0.001))
+        scale_y_continuous(expand = c(0.001, 0.001)) +
+        scale_x_continuous(breaks = seq(0, 120, by = 20), expand = c(0.001, 0.001))
     
     return(p_cdistro)
 }

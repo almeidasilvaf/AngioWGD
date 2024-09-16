@@ -19,6 +19,6 @@ Plot a histogram and density line with a consensus posterior distributions of WG
 \examples{
 data(posterior_hist)
 
-hist_data <- posterior_hist$combined |> dplyr::filter(WGD_ID == "MUSA_beta")
+hist_data <- posterior_hist$combined |> dplyr::filter(WGD_ID == "JUGL")
 p <- plot_consensus_age_distro(hist_data)
 }

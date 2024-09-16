@@ -269,6 +269,10 @@ distros <- lapply(dirs, function(x) {
 # Create a long data frame with WGD ID, species, and age
 posterior_ages <- Reduce(rbind, distros) |>
     mutate(
+        WGD_ID = str_replace_all(
+            WGD_ID,
+            c("_alpha" = " a", "_beta" = " b")
+        ),
         WGD_ID = factor(WGD_ID),
         species = str_replace_all(species, "Pisum_sativm", "Pisum_sativum"),
         species = str_replace_all(
@@ -312,10 +316,8 @@ hist_data_all <- posterior_ages |>
 posterior_hist <- list(byspecies = hist_data, combined = hist_data_all) 
 
 # Save data
-usethis::use_data(posterior_hist, compress = "xz")
+usethis::use_data(posterior_hist, compress = "xz", overwrite = TRUE)
 ```
-
-
 
 
 # Data in `inst/extdata/`

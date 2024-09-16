@@ -19,6 +19,6 @@ Plot a histogram and density line with posterior distributions of WGD ages
 \examples{
 data(posterior_hist)
 
-hist_data <- posterior_hist$byspecies |> dplyr::filter(WGD_ID == "MUSA_beta")
+hist_data <- posterior_hist$byspecies |> dplyr::filter(WGD_ID == "JUGL")
 p <- plot_age_distro(hist_data)
 }
