@@ -16,7 +16,7 @@ mod_wgd_by_species_ui <- function(id){
   tagList(
       shinyjs::useShinyjs(),
       fluidRow(
-          shinydashboard::box(
+          shinydashboardPlus::box(
               solidHeader = TRUE,
               title = "WGD events per species",
               status = "success", width = 12,
@@ -24,11 +24,76 @@ mod_wgd_by_species_ui <- function(id){
                   DT::dataTableOutput(ns("wgd_byspecies")),
                   color = "#276c4c"
               ),
+              fluidRow(column(
+                  6, offset = 5,
+                  actionButton(
+                      ns("button_plot"),
+                      label = "Show age distributions"
+                  )
+              )),
+              hr(),
               helpText(
                   "Explore WGD events for each species. You can visualize", 
-                  "posterior distribution(s) of WGD ages for a selected WGD event."
+                  "posterior age distribution(s) for a WGD event by selecting",
+                  "a row and clicking the 'Show age distributions' button."
+              ),
+              sidebar = shinydashboardPlus::boxSidebar(
+                  id = ns("wgd_byspecies_sidebar"),
+                  width = 25,
+                  icon = shiny::icon("download"),
+                  selectInput(
+                      ns("tableformat"),
+                      label = "Choose file format:",
+                      choices = c(".tsv", ".tsv.gz")
+                  ),
+                  column(
+                      6, 
+                      downloadButton(ns("download_table"), label = "Download")
+                  )
               )
           )
+      ),
+      # Another box to be shown if button is clicked
+      shinyjs::hidden(
+          div(
+              id = ns("plot_box"),
+              shinydashboardPlus::box(
+                  solidHeader = TRUE, status = "success", width = 12,
+                  title = "Posterior distributions of WGD age",
+                  plotOutput(ns("age_distros")),
+                  sidebar = shinydashboardPlus::boxSidebar(
+                      id = ns("age_distros_sidebar"),
+                      width = 25,
+                      icon = shiny::icon("download"),
+                      selectInput(
+                          ns("figformat"),
+                          label = "Choose file format:",
+                          choices = c(".pdf", ".svg")
+                      ),
+                      column(
+                          6,
+                          numericInput(
+                              ns("figwidth"), 
+                              label = "Figure width:",
+                              value = 10, min = 3, max = 30, step = 1
+                          )
+                      ),
+                      column(
+                          6,
+                          numericInput(
+                              ns("figheight"), 
+                              label = "Figure height:",
+                              value = 5, min = 3, max = 30, step = 1
+                          )
+                      ),
+                      column(
+                          6, offset = 2, 
+                          downloadButton(ns("download_fig"), label = "Download")
+                      )
+                  )
+              )
+          )
+          
       )
 
        
@@ -46,19 +111,66 @@ mod_wgd_by_species_server <- function(id){
     ## Table of WGD events
     wgd_table <- reactive({
         df <- wgd_dates |>
+            dplyr::mutate(
+                species = gsub("_", " ", species),
+                wgd_id = as.factor(wgd_id)
+            ) |>
             dplyr::select(
-                Species = species,
                 `WGD ID` = wgd_id,
+                Species = species,
                 `Ks peak` = ks_peak,
                 `Ks credible range` = credible_range,
                 `Posterior mean (WGD age)` = posterior_mean,
                 `Posterior median (WGD age)` = posterior_median,
                 `Posterior mode (WGD age)` = posterior_mode,
-                `90% HPD` = x90_percent_hpd
+                `90% HPD` = x90_percent_hpd,
+                `Consensus peak` = consensus_peak,
+                `90% HCR` = x90_percent_hcr
             )
         
         df
     })
+    
+    ## Age distributions per species
+    distro_plot <- reactive({
+        req(selected_wgd())
+        
+        ## Plot 1: by species
+        pdata1 <- posterior_hist$byspecies |>
+            dplyr::filter(WGD_ID == selected_wgd())
+        p1 <- plot_age_distro(pdata1)
+        
+        ## Plot 2: all combined
+        pdata2 <- posterior_hist$combined |>
+            dplyr::filter(WGD_ID == selected_wgd())
+        
+        p2 <- plot_consensus_age_distro(pdata2)
+        
+        ## Combining plots
+        final_plot <- patchwork::wrap_plots(p1, p2, nrow = 1)
+        
+        final_plot
+    })
+    
+    # Show plot box if button is clicked
+    observe({
+        toggleState("button_plot", !is.null(input$wgd_byspecies_rows_selected))
+    })
+    
+    selected_wgd <- reactive({
+        w <- NULL
+        if(input$button_plot && !is.null(input$wgd_byspecies_rows_selected)) {
+            idx <- input$wgd_byspecies_rows_selected
+            w <- as.character(wgd_table()[idx, 1])
+        }
+        
+        w
+    })
+    
+    observeEvent(input$button_plot, {
+        shinyjs::toggle("plot_box")
+    })
+    
     
     
     # Render outputs
@@ -75,6 +187,35 @@ mod_wgd_by_species_server <- function(id){
             )
         )
     })
+    
+    output$age_distros <- renderPlot({
+        distro_plot()
+    }, res = 96)
+    
+    
+    ## Download figure with age distros to PDF/SVG file
+    output$download_fig <- downloadHandler(
+        filename = function() {
+            paste0("posterior_age_distros_", selected_wgd(), input$figformat)
+        },
+        content = function(file) {
+            ggsave(
+                distro_plot(), filename = file, 
+                width = input$figwidth, height = input$figheight
+            )
+        }
+    )
+    
+    ## Download table with WGD info per species
+    output$download_table <- downloadHandler(
+        filename = function() {
+            paste0("wgds_per_species", input$tableformat)
+        },
+        content = function(file) {
+            readr::write_tsv(wgd_table(), file = file)
+        }
+    )
+    
     
   })
 }
