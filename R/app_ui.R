@@ -85,7 +85,13 @@ app_ui <- function(request) {
                     # Frontpage - tab_faq --------------------------------------
                     shinydashboard::tabItem(
                         "tab_faq",
-                        tags$h3("Frequently Asked Questions", class = "title-header")
+                        tags$h3("Frequently Asked Questions", class = "title-header"),
+                        shinydashboard::box(
+                            width = 12, status = "success",
+                            htmltools::includeMarkdown(
+                                system.file("extdata", "faq.md", package = "AngioWGD")
+                            )
+                        )
                     )
                 )
             )
