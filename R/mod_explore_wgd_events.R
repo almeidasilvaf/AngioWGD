@@ -6,11 +6,9 @@
 #'
 #' @noRd 
 #'
-#' @importFrom shiny NS selectInput h3 tagList fluidRow column actionButton 
-#' icon imageOutput helpText textInput uiOutput sliderInput
+#' @import shiny
+#' @import shinydashboard
 #' @importFrom shinydashboard box
-#' @importFrom xml2 as_xml_document
-#' @importFrom plotly plotlyOutput
 #' @importFrom shiny selectizeInput
 #' @importFrom shinyjs hidden show useShinyjs
 #' @importFrom shinycssloaders withSpinner
@@ -191,7 +189,6 @@ mod_explore_wgd_events_ui <- function(id) {
 #' scale_color_gradient scale_fill_manual theme_bw theme scale_color_manual
 #' geom_bar element_blank coord_radial
 #' @importFrom plotly renderPlotly ggplotly layout
-#' @importFrom scales squish
 #' @importFrom dplyr mutate group_by summarise
 #' @importFrom stats median
 #' @importFrom shinyjs onclick toggle toggleState
@@ -290,9 +287,6 @@ mod_explore_wgd_events_server <- function(id) {
                     label_size = es()$label_size
                 )
             }
-            
-            # Change color palette of points
-            p <- p + ggsci::scale_color_d3("category20")
             
             # Add WGD rectangles
             p <- add_wgd_rects(
