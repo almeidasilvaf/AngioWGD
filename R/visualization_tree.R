@@ -20,12 +20,13 @@
 #' @importFrom geomtextpath geom_textpath
 #' @importFrom ape node.depth.edgelength
 #' @importFrom deeptime coord_geo_radial guide_geo
+#' @importFrom stats na.omit
 #' @rdname plot_timetree_circular
 #' @examples
 #' data(tree)
 #' data(species_metadata)
 #' metadata <- species_metadata
-#' plot_timetree_circular(tree, species_metadata, color_by = "taxonomy_3")
+#' plot_timetree_circular(tree, species_metadata)
 plot_timetree_circular <- function(
         tree, metadata, 
         periods_alpha = 0.4,
@@ -65,6 +66,17 @@ plot_timetree_circular <- function(
         theme_classic() +
         geom_tippoint(aes(color = .data[[color_by]])) +
         labs(color = "Clade")
+    
+    # Choose color palette based on number of levels
+    pal <- c(
+        "#1F77B4FF", "#FF7F0EFF", "#2CA02CFF", "#D62728FF", "#9467BDFF", 
+        "#8C564BFF", "#E377C2FF", "#7F7F7FFF", "#BCBD22FF", "#17BECFFF", 
+        "#AEC7E8FF", "#FFBB78FF", "#98DF8AFF", "#FF9896FF", "#C5B0D5FF", 
+        "#C49C94FF", "#F7B6D2FF", "#C7C7C7FF", "#DBDB8DFF", "#9EDAE5FF"
+    )
+    nlevels <- unique(p$data[[color_by]]) |> na.omit()
+    pal <- pal[seq_along(nlevels)]
+    p <- p + scale_color_manual(values = pal)
     
     # Add labels to tips (species names)? 
     if(add_labels) {
@@ -141,6 +153,17 @@ plot_timetree_rectangular <- function(
         ) +
         ggtree::theme_tree2() +
         labs(color = "Clade")
+    
+    # Choose color palette based on number of levels
+    pal <- c(
+        "#1F77B4FF", "#FF7F0EFF", "#2CA02CFF", "#D62728FF", "#9467BDFF", 
+        "#8C564BFF", "#E377C2FF", "#7F7F7FFF", "#BCBD22FF", "#17BECFFF", 
+        "#AEC7E8FF", "#FFBB78FF", "#98DF8AFF", "#FF9896FF", "#C5B0D5FF", 
+        "#C49C94FF", "#F7B6D2FF", "#C7C7C7FF", "#DBDB8DFF", "#9EDAE5FF"
+    )
+    nlevels <- unique(p$data[[color_by]]) |> na.omit()
+    pal <- pal[seq_along(nlevels)]
+    p <- p + scale_color_manual(values = pal)
     
     # Add labels to tips (species names)?
     if(add_labels) {

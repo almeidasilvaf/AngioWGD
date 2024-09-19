@@ -37,5 +37,5 @@ Plot a timetree for angiosperms in circular layout
 data(tree)
 data(species_metadata)
 metadata <- species_metadata
-plot_timetree_circular(tree, species_metadata, color_by = "taxonomy_3")
+plot_timetree_circular(tree, species_metadata)
 }
