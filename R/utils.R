@@ -234,6 +234,7 @@ pal_auto <- function(lev) {
 #'
 #' @return A data frame with x and y coordinates of the density line to plot.
 #' @noRd
+#' @importFrom stats density
 #' @examples
 #' data(posterior_hist)
 #' 

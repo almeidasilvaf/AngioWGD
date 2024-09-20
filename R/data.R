@@ -116,5 +116,18 @@
 "posterior_hist"
 
 
+#' Period data from the International Commission on Stratigraphy (v2023/06)
+#' 
+#' Same data set as in \strong{deeptime::periods}. See `?deeptime::periods`
+#' for more details.
+#' 
+#' @name periods
+#' @format A data frame with 22 rows and 5 variables. See `?deeptime::periods`
+#' for more details.
+#' 
+#' @examples
+#' data(periods)
+#' @usage data(periods)
+"periods"
 
 

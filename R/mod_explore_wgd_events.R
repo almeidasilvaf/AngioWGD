@@ -198,7 +198,6 @@ mod_explore_wgd_events_server <- function(id) {
         requireNamespace("ggplot2")
         
         ns <- session$ns
-        data(periods, package = "deeptime")
         
         # Update selectizeInput() with clade name ----
         updateSelectizeInput(

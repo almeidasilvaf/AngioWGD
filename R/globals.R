@@ -7,6 +7,7 @@ utils::globalVariables(
         "wgd_dates",
         "available_clades",
         "data_urls",
-        "posterior_hist"
+        "posterior_hist",
+        "periods"
     )
 )

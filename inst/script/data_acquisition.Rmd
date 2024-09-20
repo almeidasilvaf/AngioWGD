@@ -320,6 +320,16 @@ posterior_hist <- lapply(posterior_hist, as.data.frame)
 usethis::use_data(posterior_hist, compress = "xz", overwrite = TRUE)
 ```
 
+## periods.rda
+
+Same as in `deeptime::periods`.
+
+```{r}
+periods <- deeptime::periods
+
+usethis::use_data(periods, compress = "xz")
+```
+
 
 # Data in `inst/extdata/`
 

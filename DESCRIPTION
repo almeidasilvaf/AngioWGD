@@ -41,7 +41,6 @@ Imports:
     shinyWidgets (>= 0.8.6),
     stats,
     utils,
-    tools,
     grDevices,
     DT (>= 0.33),
     ggplot2 (>= 3.5.1),
