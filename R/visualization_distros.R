@@ -8,6 +8,7 @@
 #' @importFrom ggplot2 ggplot geom_col scale_y_continuous geom_line 
 #' theme_classic labs aes guides guide_legend
 #' @importFrom rlang .data
+#' @export
 #' @rdname plot_age_distro
 #' @examples
 #' data(posterior_hist)
@@ -67,9 +68,11 @@ plot_age_distro <- function(hist_data) {
 #' a specific WGD as in package data \strong{hist_data}.
 #'
 #' @return A ggplot object.
+#'
 #' @importFrom ggplot2 ggplot geom_col scale_y_continuous geom_line 
 #' theme_classic labs aes
 #' @rdname plot_consensus_age_distro
+#' @export
 #' @examples
 #' data(posterior_hist)
 #' 

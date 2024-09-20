@@ -15,6 +15,7 @@ A data frame with the following variables:
   \item{taxonomy_2}{Character, one of 'Asterids' or 'Rosids'.}
   \item{taxonomy_3}{Character, one of 'ANA grade', 'Monocots', 'Magnoliids',
   'Chloranthales', 'Ceratophyllales', or 'Eudicots'.}
+  \item{species_name}{Character, 'clean' species names.}
 }
 }
 \usage{

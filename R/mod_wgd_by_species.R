@@ -111,7 +111,7 @@ mod_wgd_by_species_ui <- function(id) {
 #' @importFrom stats setNames
 #' @importFrom ggplot2 ggsave
 #' @importFrom utils write.table
-#' @importFrom shiny downloadHandler
+#' @importFrom shiny downloadHandler req moduleServer observe observeEvent
 mod_wgd_by_species_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns

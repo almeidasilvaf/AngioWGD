@@ -24,10 +24,13 @@
 #' @importFrom stats na.omit
 #' @importFrom grid unit
 #' @rdname plot_timetree_circular
+#' @export
 #' @examples
 #' data(tree)
 #' data(species_metadata)
 #' metadata <- species_metadata
+#' coord_radial <- ggplot2::coord_radial
+#' scale_y_continuous <- ggplot2::scale_y_continuous
 #' plot_timetree_circular(tree, species_metadata)
 plot_timetree_circular <- function(
         tree, metadata, 
@@ -38,6 +41,8 @@ plot_timetree_circular <- function(
     
     color_by <- tree_taxon_auto(tree, metadata)
     xmin <- round(max(ape::node.depth.edgelength(tree)) + 20, -1)
+    coord_radial <- ggplot2::coord_radial
+    scale_y_continuous <- ggplot2::scale_y_continuous
     
     # Define period boundaries and colors
     age_breaks <- c(201.4, 145.0, 66.0, 23.03)
@@ -83,7 +88,7 @@ plot_timetree_circular <- function(
     # Add labels to tips (species names)? 
     if(add_labels) {
         p <- p + geomtextpath::geom_textpath(
-            aes(x = x + 5, label = species_name), 
+            aes(x = .data$x + 5, label = .data$species_name), 
             size = label_size, hjust = 1
         )
     }
@@ -99,8 +104,6 @@ plot_timetree_circular <- function(
 #' @param tree A `phylo` object with an ultrametric tree.
 #' @param metadata A data frame of species metadata (e.g., taxonomic 
 #' information and any other relevant variables describing species).
-#' @param xlim Numeric vector of length 2 indicating the x-axis limits.
-#' Default: \code{c(-220, 2)}.
 #' @param pointsize Numeric indicating the size of the point 
 #' in `ggtree::geom_tippoint()`. Default: 2.
 #' @param pointalpha Numeric indicating the alpha aesthetic of the point
@@ -169,7 +172,7 @@ plot_timetree_rectangular <- function(
     
     # Add labels to tips (species names)?
     if(add_labels) {
-        p <- p + ggtree::geom_tiplab(aes(x = x + 5, label = species_name), size = label_size)
+        p <- p + ggtree::geom_tiplab(aes(x = .data$x + 5, label = .data$species_name), size = label_size)
     }
     
     return(p)
@@ -257,7 +260,7 @@ add_wgd_rects <- function(p, tree, wgd_dates, rh = 0.25, highlight = NULL) {
             }
             
             p <- p + geom_rect(
-                aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+                aes(xmin = .data$xmin, xmax = .data$xmax, ymin = .data$ymin, ymax = .data$ymax),
                 data = rect_coord[i, ], inherit.aes = FALSE, 
                 fill = bg, color = NA
             )

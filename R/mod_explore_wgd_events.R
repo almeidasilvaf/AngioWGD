@@ -7,7 +7,7 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList fluidRow column selectizeInput a div
-#' sliderInput actionButton helpText downloadButton plotOutput
+#' sliderInput actionButton helpText downloadButton plotOutput hr
 #' selectInput numericInput updateSelectizeInput
 #' @importFrom shinydashboardPlus box boxSidebar
 #' @importFrom shinyjs hidden show useShinyjs onclick
@@ -302,7 +302,7 @@ mod_explore_wgd_events_server <- function(id) {
                 
                 p <- p + geom_rect(
                     data = hdf,
-                    aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+                    aes(xmin = .data$xmin, xmax = .data$xmax, ymin = .data$ymin, ymax = .data$ymax),
                     inherit.aes = FALSE, alpha = 0.3, fill = "darkolivegreen"
                 )
             }

@@ -33,9 +33,6 @@ in `ggtree::geom_tippoint()`. Default: 0.8.}
 valid if \strong{add_labels = TRUE}. Default: 1.4.}
 
 \item{...}{Additional arguments to \code{deeptime::coord_geo()}.}
-
-\item{xlim}{Numeric vector of length 2 indicating the x-axis limits.
-Default: \code{c(-220, 2)}.}
 }
 \value{
 A `ggtree` object.

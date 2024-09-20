@@ -3,6 +3,7 @@
 #' @param input,output,session Internal parameters for {shiny}. 
 #'     DO NOT REMOVE.
 #' @noRd
+#' @importFrom shiny renderUI strong
 app_server <- function(input, output, session) {
     
     output$citation_text <- renderUI({
