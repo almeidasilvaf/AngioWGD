@@ -5,9 +5,6 @@
 #' @noRd
 app_server <- function(input, output, session) {
     
-    suppressPackageStartupMessages(library(Cairo))
-    options(shiny.usecairo = TRUE)
-    
     output$citation_text <- renderUI({
         if (!isTRUE(input$sidebarCollapsed)) {
             tagList(
