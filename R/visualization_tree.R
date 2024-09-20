@@ -29,8 +29,6 @@
 #' data(tree)
 #' data(species_metadata)
 #' metadata <- species_metadata
-#' coord_radial <- ggplot2::coord_radial
-#' scale_y_continuous <- ggplot2::scale_y_continuous
 #' plot_timetree_circular(tree, species_metadata)
 plot_timetree_circular <- function(
         tree, metadata, 
@@ -41,8 +39,6 @@ plot_timetree_circular <- function(
     
     color_by <- tree_taxon_auto(tree, metadata)
     xmin <- round(max(ape::node.depth.edgelength(tree)) + 20, -1)
-    coord_radial <- ggplot2::coord_radial
-    scale_y_continuous <- ggplot2::scale_y_continuous
     
     # Define period boundaries and colors
     age_breaks <- c(201.4, 145.0, 66.0, 23.03)

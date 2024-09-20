@@ -1,4 +1,4 @@
 library(testthat)
-library(SoybeanExpressionAtlas)
+library(AngioWGD)
 
-test_check("SoybeanExpressionAtlas")
+test_check("AngioWGD")

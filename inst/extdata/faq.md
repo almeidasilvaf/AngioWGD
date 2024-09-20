@@ -9,6 +9,7 @@
 ----
 
 > **2) How do I save figures/tables to files?**
+>
 > Boxes in all tabs with figures and tables have a download 
 > button (![](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/download.svg){width="1%"})
 > at the top right corner. By clicking it, you can specify the output file 

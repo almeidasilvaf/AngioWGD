@@ -37,7 +37,5 @@ Plot a timetree for angiosperms in circular layout
 data(tree)
 data(species_metadata)
 metadata <- species_metadata
-coord_radial <- ggplot2::coord_radial
-scale_y_continuous <- ggplot2::scale_y_continuous
 plot_timetree_circular(tree, species_metadata)
 }
