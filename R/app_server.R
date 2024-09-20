@@ -10,7 +10,7 @@ app_server <- function(input, output, session) {
         if (!isTRUE(input$sidebarCollapsed)) {
             tagList(
                 tags$p(strong("Citation:"), style = "color: #333; text-align: justify; margin-inline-start: 10px; margin-inline-end: 10px;"),
-                tags$p("Chen H, Almeida-Silva F, Logghe G, Bonte D, Van de Peer Y. (2024). The rise of polyploids during environmental catastrophes.", tags$em("bioRxiv."), "DOI: xxx/yyy", style = "color: #333; text-align: justify; margin-inline-start: 10px; margin-inline-end: 10px;")
+                tags$p("Chen H, Almeida-Silva F, Logghe G, Bonte D, Van de Peer Y. (2024). The rise of polyploids during environmental catastrophes.", tags$em("bioRxiv."), style = "color: #333; text-align: justify; margin-inline-start: 10px; margin-inline-end: 10px;")
             )
         }
     })
