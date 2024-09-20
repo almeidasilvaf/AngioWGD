@@ -157,8 +157,8 @@ body {
 .skin-green .main-header .logo {
     background-color: #276c4c;
     color: #fff;
-    font-size: 16px;
     border-bottom: 0 solid transparent;
+    height: 52px;
 }
 
 /* Navbar color */
