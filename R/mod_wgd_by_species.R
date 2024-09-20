@@ -6,7 +6,7 @@
 #'
 #' @noRd 
 #'
-#' @importFrom shiny NS tagList helpText
+#' @importFrom shiny NS tagList helpText br
 #' @importFrom shinyjs useShinyjs
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom DT dataTableOutput
@@ -40,14 +40,19 @@ mod_wgd_by_species_ui <- function(id) {
                     id = ns("wgd_byspecies_sidebar"),
                     width = 25,
                     icon = shiny::icon("download"),
-                    selectInput(
-                        ns("tableformat"),
-                        label = "Choose file format:",
-                        choices = c(".tsv", ".tsv.gz")
-                    ),
-                    column(
-                        6, 
-                        downloadButton(ns("download_table"), label = "Download")
+                    fluidRow(
+                        column(
+                            7, selectInput(
+                                ns("tableformat"),
+                                label = "Choose file format:",
+                                choices = c(".tsv", ".tsv.gz")
+                            )
+                        ),
+                        column(
+                            5, 
+                            shiny::br(),
+                            downloadButton(ns("download_table"), label = "Download")
+                        )
                     )
                 )
             )
@@ -86,7 +91,7 @@ mod_wgd_by_species_ui <- function(id) {
                             )
                         ),
                         column(
-                            6, offset = 2, 
+                            6, offset = 3,
                             downloadButton(ns("download_fig"), label = "Download")
                         )
                     )

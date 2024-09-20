@@ -1,17 +1,27 @@
 Package: AngioWGD
 Title: A Shiny app to explore whole-genome duplication events in angiosperms
-Version: 0.99
+Version: 0.99.0
 Authors@R: 
     c(
-    person(given = "Fabrício",
-           family = "Almeida-Silva",
-           role = c("aut", "cre"),
-           email = "fabricio_almeidasilva@hotmail.com",
-           comment = c(ORCID = "0000-0002-5314-2964")),
-    person(given = "Henghchi",
-           family = "Chen",
-           role = "aut",
-           comment = c(ORCID = "0000-0003-1173-6622"))
+        person(
+            given = "Fabrício",
+            family = "Almeida-Silva",
+            role = c("aut", "cre"),
+            email = "fabricio_almeidasilva@hotmail.com",
+            comment = c(ORCID = "0000-0002-5314-2964")
+        ),
+        person(
+            given = "Henghchi",
+            family = "Chen",
+            role = "aut",
+            comment = c(ORCID = "0000-0003-1173-6622")
+        ),
+        person(
+            given = "Yves",
+            family = "Van de Peer",
+            role = "aut",
+            comment = c(ORCID = "0000-0003-4327-3730")
+        )
     )
 Description: This package contains a Shiny app where users can explore
     whole-genome duplication (WGD) events in angiosperms, their dates,
