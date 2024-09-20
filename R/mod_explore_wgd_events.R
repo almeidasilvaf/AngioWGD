@@ -26,13 +26,14 @@ mod_explore_wgd_events_ui <- function(id) {
                 # Center-aligned box
                 shinydashboardPlus::box(
                     status = "success",
+                    solidHeader = TRUE, title = "Query options",
                     ## Row 1 of the box: dropdown button to select part(s)
                     fluidRow(
                         column(
                             12, offset = 0,
                             selectizeInput(
                                 ns("input_clade"),
-                                label = "Choose clade:",
+                                label = "Clade:",
                                 choices = NULL
                             )
                         )
