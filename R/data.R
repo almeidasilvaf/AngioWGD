@@ -90,3 +90,31 @@
 #' data(data_urls)
 #' @usage data(data_urls)
 "data_urls"
+
+
+#' Pre-computed histogram statistics for posterior distributions of WGD ages
+#' 
+#' @name posterior_hist
+#' @format A list of two data frames named \strong{byspecies} 
+#' and \strong{combined} with histogram statistics for each WGD grouped by
+#' species and not grouped by species, respectively. Data frames have the
+#' following variables:
+#' \describe{
+#'   \item{WGD_ID}{Factor, WGD ID.}
+#'   \item{species}{Factor, species name. Only present in \strong{byspecies} data frame.}
+#'   \item{total_count}{Numeric, total number of observations.}
+#'   \item{xmin}{Numeric, lower boundary of the histogram bin.}
+#'   \item{xmax}{Numeric, upper boundary of the histogram bin.}
+#'   \item{mids}{Numeric, difference between upper and lower boundary.}
+#'   \item{counts}{Numeric, number of observations in each bin.}
+#'   \item{density}{Numeric, density of each bin.}
+#' }
+#' 
+#' @examples
+#' data(posterior_hist)
+#' @usage data(posterior_hist)
+"posterior_hist"
+
+
+
+
