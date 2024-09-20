@@ -2,13 +2,12 @@
 #' 
 #' @param request Internal parameter for `{shiny}`. 
 #'
-#' @importFrom shiny selectizeInput tags fluidRow div plotOutput tagList 
-#' h2 h3 HTML
-#' @importFrom shinydashboard dashboardPage dashboardHeader dashboardSidebar
-#' dashboardBody valueBoxOutput box menuItem sidebarMenu
-#' @importFrom DT DTOutput
+#' @importFrom shiny tags h2 h3 HTML icon uiOutput
+#' @importFrom shinydashboard dashboardPage dashboardHeader 
+#' dashboardBody valueBoxOutput menuItem sidebarMenu menuItem tabItems
+#' @importFrom htmltools includeMarkdown
+#' @importFrom shinydashboardPlus dashboardSidebar
 #' @importFrom shinyjs useShinyjs
-#' @importFrom shiny strong
 #' @importFrom metathis meta meta_description meta_social meta_viewport
 #' @noRd
 app_ui <- function(request) {
@@ -86,7 +85,7 @@ app_ui <- function(request) {
                     shinydashboard::tabItem(
                         "tab_faq",
                         tags$h3("Frequently Asked Questions", class = "title-header"),
-                        shinydashboard::box(
+                        shinydashboardPlus::box(
                             width = 12, status = "success",
                             htmltools::includeMarkdown(
                                 system.file("extdata", "faq.md", package = "AngioWGD")

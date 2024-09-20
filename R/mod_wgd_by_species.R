@@ -7,97 +7,96 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList helpText
-#' @importFrom shinydashboard box
 #' @importFrom shinyjs useShinyjs
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom DT dataTableOutput
-mod_wgd_by_species_ui <- function(id){
-  ns <- NS(id)
-  tagList(
-      shinyjs::useShinyjs(),
-      fluidRow(
-          shinydashboardPlus::box(
-              solidHeader = TRUE,
-              title = "WGD events per species",
-              status = "success", width = 12,
-              withSpinner(
-                  DT::dataTableOutput(ns("wgd_byspecies")),
-                  color = "#276c4c"
-              ),
-              fluidRow(column(
-                  6, offset = 5,
-                  actionButton(
-                      ns("button_plot"),
-                      label = "Show age distributions"
-                  )
-              )),
-              hr(),
-              helpText(
-                  "Explore WGD events for each species. You can visualize", 
-                  "posterior age distribution(s) for a WGD event by selecting",
-                  "a row and clicking the 'Show age distributions' button."
-              ),
-              sidebar = shinydashboardPlus::boxSidebar(
-                  id = ns("wgd_byspecies_sidebar"),
-                  width = 25,
-                  icon = shiny::icon("download"),
-                  selectInput(
-                      ns("tableformat"),
-                      label = "Choose file format:",
-                      choices = c(".tsv", ".tsv.gz")
-                  ),
-                  column(
-                      6, 
-                      downloadButton(ns("download_table"), label = "Download")
-                  )
-              )
-          )
-      ),
-      # Another box to be shown if button is clicked
-      shinyjs::hidden(
-          div(
-              id = ns("plot_box"),
-              shinydashboardPlus::box(
-                  solidHeader = TRUE, status = "success", width = 12,
-                  title = "Posterior distributions of WGD age",
-                  plotOutput(ns("age_distros")),
-                  sidebar = shinydashboardPlus::boxSidebar(
-                      id = ns("age_distros_sidebar"),
-                      width = 25,
-                      icon = shiny::icon("download"),
-                      selectInput(
-                          ns("figformat"),
-                          label = "Choose file format:",
-                          choices = c(".pdf", ".svg")
-                      ),
-                      column(
-                          6,
-                          numericInput(
-                              ns("figwidth"), 
-                              label = "Figure width:",
-                              value = 10, min = 3, max = 30, step = 1
-                          )
-                      ),
-                      column(
-                          6,
-                          numericInput(
-                              ns("figheight"), 
-                              label = "Figure height:",
-                              value = 5, min = 3, max = 30, step = 1
-                          )
-                      ),
-                      column(
-                          6, offset = 2, 
-                          downloadButton(ns("download_fig"), label = "Download")
-                      )
-                  )
-              )
-          )
-          
-      )
-
-       
-  )
+mod_wgd_by_species_ui <- function(id) {
+    ns <- NS(id)
+    tagList(
+        shinyjs::useShinyjs(),
+        fluidRow(
+            shinydashboardPlus::box(
+                solidHeader = TRUE,
+                title = "WGD events per species",
+                status = "success", width = 12,
+                withSpinner(
+                    DT::dataTableOutput(ns("wgd_byspecies")),
+                    color = "#276c4c"
+                ),
+                fluidRow(column(
+                    6, offset = 5,
+                    actionButton(
+                        ns("button_plot"),
+                        label = "Show age distributions"
+                    )
+                )),
+                hr(),
+                helpText(
+                    "Explore WGD events for each species. You can visualize", 
+                    "posterior age distribution(s) for a WGD event by selecting",
+                    "a row and clicking the 'Show age distributions' button."
+                ),
+                sidebar = shinydashboardPlus::boxSidebar(
+                    id = ns("wgd_byspecies_sidebar"),
+                    width = 25,
+                    icon = shiny::icon("download"),
+                    selectInput(
+                        ns("tableformat"),
+                        label = "Choose file format:",
+                        choices = c(".tsv", ".tsv.gz")
+                    ),
+                    column(
+                        6, 
+                        downloadButton(ns("download_table"), label = "Download")
+                    )
+                )
+            )
+        ),
+        # Another box to be shown if button is clicked
+        shinyjs::hidden(
+            div(
+                id = ns("plot_box"),
+                shinydashboardPlus::box(
+                    solidHeader = TRUE, status = "success", width = 12,
+                    title = "Posterior distributions of WGD age",
+                    plotOutput(ns("age_distros")),
+                    sidebar = shinydashboardPlus::boxSidebar(
+                        id = ns("age_distros_sidebar"),
+                        width = 25,
+                        icon = shiny::icon("download"),
+                        selectInput(
+                            ns("figformat"),
+                            label = "Choose file format:",
+                            choices = c(".pdf", ".svg")
+                        ),
+                        column(
+                            6,
+                            numericInput(
+                                ns("figwidth"), 
+                                label = "Figure width:",
+                                value = 10, min = 3, max = 30, step = 1
+                            )
+                        ),
+                        column(
+                            6,
+                            numericInput(
+                                ns("figheight"), 
+                                label = "Figure height:",
+                                value = 5, min = 3, max = 30, step = 1
+                            )
+                        ),
+                        column(
+                            6, offset = 2, 
+                            downloadButton(ns("download_fig"), label = "Download")
+                        )
+                    )
+                )
+            )
+            
+        )
+        
+        
+    )
 }
     
 #' wgd_by_species Server Functions

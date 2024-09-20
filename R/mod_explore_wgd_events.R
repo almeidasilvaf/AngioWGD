@@ -6,13 +6,14 @@
 #'
 #' @noRd 
 #'
-#' @import shiny
-#' @import shinydashboard
-#' @importFrom shinydashboard box
-#' @importFrom shiny selectizeInput
-#' @importFrom shinyjs hidden show useShinyjs
+#' @importFrom shiny NS tagList fluidRow column selectizeInput a div
+#' sliderInput actionButton helpText downloadButton plotOutput
+#' selectInput numericInput updateSelectizeInput
+#' @importFrom shinydashboardPlus box boxSidebar
+#' @importFrom shinyjs hidden show useShinyjs onclick
 #' @importFrom shinycssloaders withSpinner
-#' @importFrom shinyWidgets radioGroupButtons
+#' @importFrom shinyWidgets radioGroupButtons switchInput
+#' @importFrom DT dataTableOutput 
 mod_explore_wgd_events_ui <- function(id) {
     
     ns <- NS(id)
@@ -23,7 +24,7 @@ mod_explore_wgd_events_ui <- function(id) {
             column(
                 width = 8, offset = 4,
                 # Center-aligned box
-                shinydashboard::box(
+                shinydashboardPlus::box(
                     status = "success",
                     ## Row 1 of the box: dropdown button to select part(s)
                     fluidRow(
@@ -137,7 +138,6 @@ mod_explore_wgd_events_ui <- function(id) {
                 ),
                 hr(),
                 helpText(
-                    "Rectangles indicate the HPD region of the WGD dates."
                 )
             ),
             ## Add box to contain DT DataTable with WGD ages

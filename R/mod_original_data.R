@@ -7,11 +7,12 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
+#' @importFrom DT dataTableOutput
 mod_original_data_ui <- function(id){
   ns <- NS(id)
   tagList(
       fluidRow(
-          shinydashboard::box(
+          shinydashboardPlus::box(
               solidHeader = TRUE,
               title = "Species included in this resource",
               status = "success", width = 12,
@@ -33,8 +34,9 @@ mod_original_data_ui <- function(id){
     
 #' original_data Server Functions
 #'
+#' @importFrom DT renderDataTable datatable
 #' @noRd 
-mod_original_data_server <- function(id){
+mod_original_data_server <- function(id) {
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     

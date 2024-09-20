@@ -190,7 +190,7 @@ subset_wgd_per_clade <- function(wgd_table, metadata, clade) {
 #' be mapped.
 #' 
 #' @return A character vector of colors for each unique element of \strong{lev}.
-#' @importFrom grDevices gray.colors
+#' @importFrom grDevices hcl.colors
 #' @noRd
 pal_auto <- function(lev) {
     

@@ -16,7 +16,6 @@
 #' 
 #' @importFrom ggtree ggtree %<+% geom_tippoint revts
 #' @importFrom ggplot2 scale_y_continuous scale_x_continuous theme_minimal
-#' @import ggplot2
 #' @importFrom geomtextpath geom_textpath
 #' @importFrom ape node.depth.edgelength
 #' @importFrom deeptime coord_geo_radial guide_geo
