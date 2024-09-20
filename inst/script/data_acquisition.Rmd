@@ -313,7 +313,8 @@ hist_data_all <- posterior_ages |>
     group_by(WGD_ID) |>
     compute_histogram_data()
 
-posterior_hist <- list(byspecies = hist_data, combined = hist_data_all) 
+posterior_hist <- list(byspecies = hist_data, combined = hist_data_all)
+posterior_hist <- lapply(posterior_hist, as.data.frame)
 
 # Save data
 usethis::use_data(posterior_hist, compress = "xz", overwrite = TRUE)
