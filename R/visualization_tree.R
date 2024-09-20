@@ -16,10 +16,13 @@
 #' 
 #' @importFrom ggtree ggtree %<+% geom_tippoint revts
 #' @importFrom ggplot2 scale_y_continuous scale_x_continuous theme_minimal
+#' expansion guide_axis_stack scale_y_continuous labs scale_color_manual
+#' guide_axis theme_classic
 #' @importFrom geomtextpath geom_textpath
 #' @importFrom ape node.depth.edgelength
 #' @importFrom deeptime coord_geo_radial guide_geo
 #' @importFrom stats na.omit
+#' @importFrom grid unit
 #' @rdname plot_timetree_circular
 #' @examples
 #' data(tree)
@@ -119,7 +122,7 @@ plot_timetree_circular <- function(
 #' @examples
 #' data(tree)
 #' data(species_metadata)
-#' p <- plot_timetree_rectangular(tree, species_metadata)
+#' plot_timetree_rectangular(tree, species_metadata)
 plot_timetree_rectangular <- function(
         tree, metadata,
         pointsize = 2, pointalpha = 0.8, 
@@ -193,13 +196,11 @@ plot_timetree_rectangular <- function(
 #' data(tree)
 #' data(species_metadata)
 #' data(wgd_dates)
-#' keep <- species_metadata |> 
-#'   dplyr::filter(family %in% c("Fabaceae", "Amborellaceae")) |>
-#'   dplyr::pull(latin_name)
+#' keep <- species_metadata[species_metadata$family == "Fabaceae", "latin_name"]
 #' 
 #' ftree <- ape::keep.tip(tree, keep)
 #'
-#' p <- plot_timetree_rectangular(ftree, species_metadata, color_by = "taxonomy_3")
+#' p <- plot_timetree_rectangular(ftree, species_metadata)
 #' add_wgd_rects(p, ftree, wgd_dates, rh = 0.3)
 #'
 add_wgd_rects <- function(p, tree, wgd_dates, rh = 0.25, highlight = NULL) {

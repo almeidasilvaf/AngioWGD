@@ -114,6 +114,7 @@ subset_tree <- function(tree, metadata, clade) {
 #' @return An object of class `GridLinearGradient`.
 #' 
 #' @importFrom grid linearGradient
+#' @importFrom scales rescale alpha
 #' @noRd
 #' 
 make_gradient_fill <- function(xmin, xmax, n = 100, color = "firebrick") {
@@ -236,7 +237,8 @@ pal_auto <- function(lev) {
 #' @examples
 #' data(posterior_hist)
 #' 
-#' hdata <- posterior_hist$byspecies |> dplyr::filter(WGD_ID == "JUGL")
+#' hdata <- posterior_hist$byspecies
+#' hdata <- hdata[hdata$WGD_ID == "JUGL", ]
 #' hist2dens(hdata)
 hist2dens <- function(hdata, byspecies = TRUE) {
 

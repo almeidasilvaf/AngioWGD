@@ -189,16 +189,13 @@ mod_explore_wgd_events_ui <- function(id) {
 #' @importFrom ggplot2 labs geom_point ggplot aes theme_minimal
 #' scale_color_gradient scale_fill_manual theme_bw theme scale_color_manual
 #' geom_bar element_blank coord_radial
-#' @importFrom plotly renderPlotly ggplotly layout
-#' @importFrom dplyr mutate group_by summarise
 #' @importFrom stats median
 #' @importFrom shinyjs onclick toggle toggleState
-#' @importFrom ggsci scale_color_d3
 mod_explore_wgd_events_server <- function(id) {
     
     moduleServer(id, function(input, output, session) {
         
-        suppressPackageStartupMessages(library(ggplot2))
+        requireNamespace("ggplot2")
         
         ns <- session$ns
         data(periods, package = "deeptime")
@@ -373,7 +370,10 @@ mod_explore_wgd_events_server <- function(id) {
                 paste0("wgd_dates_", input$input_clade, input$tableformat)
             },
             content = function(file) {
-                readr::write_tsv(wgd_unique(), file = file)
+                write.table(
+                    wgd_unique(), file = file, quote = FALSE, sep = "\t", 
+                    row.names = FALSE
+                )
             }
         )
         

@@ -46,5 +46,5 @@ Plot a timetree for angiosperms in rectangular layout
 \examples{
 data(tree)
 data(species_metadata)
-p <- plot_timetree_rectangular(tree, species_metadata)
+plot_timetree_rectangular(tree, species_metadata)
 }

@@ -6,12 +6,15 @@
 #'
 #' @return A ggplot object.
 #' @importFrom ggplot2 ggplot geom_col scale_y_continuous geom_line 
-#' theme_classic labs aes
+#' theme_classic labs aes guides guide_legend
+#' @importFrom rlang .data
 #' @rdname plot_age_distro
 #' @examples
 #' data(posterior_hist)
 #' 
-#' hist_data <- posterior_hist$byspecies |> dplyr::filter(WGD_ID == "JUGL")
+#' hist_data <- posterior_hist$byspecies 
+#' hist_data <- hist_data[hist_data$WGD_ID == "JUGL", ]
+#' 
 #' p <- plot_age_distro(hist_data)
 plot_age_distro <- function(hist_data) {
     
@@ -70,8 +73,9 @@ plot_age_distro <- function(hist_data) {
 #' @examples
 #' data(posterior_hist)
 #' 
-#' hist_data <- posterior_hist$combined |> dplyr::filter(WGD_ID == "JUGL")
-#' p <- plot_consensus_age_distro(hist_data)
+#' hist_data <- posterior_hist$combined 
+#' hist_data <- hist_data[hist_data$WGD_ID == "JUGL", ]
+#' plot_consensus_age_distro(hist_data)
 plot_consensus_age_distro <- function(hist_data) {
     
     wgd_id <- gsub("_", " ", as.character(hist_data$WGD_ID[1]))
@@ -84,7 +88,6 @@ plot_consensus_age_distro <- function(hist_data) {
             aes(x = .data$mids, y = .data$density), 
             fill = "black", alpha = 0.2, 
             position = "identity"
-            #width = hist_data$xmax - hist_data$xmin
         ) +
         # Consensus density line
         geom_line(

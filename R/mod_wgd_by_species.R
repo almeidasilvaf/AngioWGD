@@ -6,7 +6,7 @@
 #'
 #' @noRd 
 #'
-#' @importFrom shiny NS tagList helpText br
+#' @importFrom shiny NS tagList helpText br downloadButton
 #' @importFrom shinyjs useShinyjs
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom DT dataTableOutput
@@ -107,6 +107,11 @@ mod_wgd_by_species_ui <- function(id) {
 #' wgd_by_species Server Functions
 #'
 #' @noRd 
+#' @importFrom patchwork wrap_plots
+#' @importFrom stats setNames
+#' @importFrom ggplot2 ggsave
+#' @importFrom utils write.table
+#' @importFrom shiny downloadHandler
 mod_wgd_by_species_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
@@ -114,24 +119,22 @@ mod_wgd_by_species_server <- function(id){
     # Define reactive values ----
     ## Table of WGD events
     wgd_table <- reactive({
-        df <- wgd_dates |>
-            dplyr::mutate(
-                species = gsub("_", " ", species),
-                wgd_id = as.factor(wgd_id)
-            ) |>
-            dplyr::select(
-                `WGD ID` = wgd_id,
-                Species = species,
-                `Ks peak` = ks_peak,
-                `Ks credible range` = credible_range,
-                `Posterior mean (WGD age)` = posterior_mean,
-                `Posterior median (WGD age)` = posterior_median,
-                `Posterior mode (WGD age)` = posterior_mode,
-                `90% HPD` = x90_percent_hpd,
-                `Consensus peak` = consensus_peak,
-                `90% HCR` = x90_percent_hcr
-            )
         
+        df <- wgd_dates
+        df$species <- gsub("_", " ", df$species)
+        df$wgd_id <- as.factor(df$wgd_id)
+        scols <- stats::setNames(
+            c("wgd_id", "species", "ks_peak", "credible_range", "posterior_mean", 
+              "posterior_median", "posterior_mode", "x90_percent_hpd", 
+              "consensus_peak", "x90_percent_hcr"),
+            c("WGD ID", "Species", "Ks peak", "Ks credible range", 
+              "Posterior mean (WGD age)", "Posterior median (WGD age)", 
+              "Posterior mode (WGD age)", "90% HPD", "Consensus peak", 
+              "90% HCR")
+        ) 
+        df <- df[, scols]
+        names(df) <- names(scols)
+
         df
     })
     
@@ -140,14 +143,15 @@ mod_wgd_by_species_server <- function(id){
         req(selected_wgd())
         
         ## Plot 1: by species
-        pdata1 <- posterior_hist$byspecies |>
-            dplyr::filter(WGD_ID == selected_wgd())
+        pdata1 <- posterior_hist$byspecies 
+        pdata1 <- pdata1[pdata1$WGD_ID == selected_wgd(), ]
+        
         p1 <- plot_age_distro(pdata1)
         
         ## Plot 2: all combined
-        pdata2 <- posterior_hist$combined |>
-            dplyr::filter(WGD_ID == selected_wgd())
-        
+        pdata2 <- posterior_hist$combined 
+        pdata2 <- pdata2[pdata2$WGD_ID == selected_wgd(), ]
+
         p2 <- plot_consensus_age_distro(pdata2)
         
         ## Combining plots
@@ -174,8 +178,6 @@ mod_wgd_by_species_server <- function(id){
     observeEvent(input$button_plot, {
         shinyjs::toggle("plot_box")
     })
-    
-    
     
     # Render outputs
     output$wgd_byspecies <- DT::renderDataTable({
@@ -216,7 +218,10 @@ mod_wgd_by_species_server <- function(id){
             paste0("wgds_per_species", input$tableformat)
         },
         content = function(file) {
-            readr::write_tsv(wgd_table(), file = file)
+            write.table(
+                wgd_table(), file = file, quote = FALSE, sep = "\t", 
+                row.names = FALSE
+            )
         }
     )
     
