@@ -37,7 +37,7 @@ mod_original_data_ui <- function(id){
 #' @importFrom DT renderDataTable datatable
 #' @noRd 
 mod_original_data_server <- function(id) {
-  moduleServer( id, function(input, output, session){
+  moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
     # Define reactive values
