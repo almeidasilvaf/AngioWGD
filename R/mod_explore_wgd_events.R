@@ -128,8 +128,8 @@ mod_explore_wgd_events_ui <- function(id) {
                             value = 10, min = 4, max = 30, step = 1
                         )
                     ),
-                    column(
-                        6, offset = 2, 
+                    fluidRow(
+                        class = "text-center",
                         downloadButton(ns("download_fig"), label = "Download")
                     )
                 ),
@@ -150,13 +150,13 @@ mod_explore_wgd_events_ui <- function(id) {
                     DT::dataTableOutput(ns("wgd_table")),
                     color = "#276c4c"
                 ),
-                fluidRow(column(
-                    6, offset = 4,
+                fluidRow(
+                    class = "text-center",
                     actionButton(
                         ns("button_highlight"),
                         label = "Highlight selected WGD events"
                     )
-                )),
+                ),
                 hr(),
                 helpText(
                     "Explore date statistics for each WGD event."
@@ -164,15 +164,15 @@ mod_explore_wgd_events_ui <- function(id) {
                 ### Add sidebar to box form where users can download the table
                 sidebar = shinydashboardPlus::boxSidebar(
                     id = ns("wgd_table_sidebar"),
-                    width = 25,
+                    width = 40,
                     icon = shiny::icon("download"),
                     selectInput(
                         ns("tableformat"),
                         label = "Choose file format:",
                         choices = c(".tsv", ".tsv.gz")
                     ),
-                    column(
-                        6, 
+                    fluidRow(
+                        class = "text-center",
                         downloadButton(ns("download_table"), label = "Download")
                     )
                 ) # /end of box sidebar

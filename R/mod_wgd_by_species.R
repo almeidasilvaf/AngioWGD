@@ -23,13 +23,13 @@ mod_wgd_by_species_ui <- function(id) {
                     DT::dataTableOutput(ns("wgd_byspecies")),
                     color = "#276c4c"
                 ),
-                fluidRow(column(
-                    6, offset = 5,
+                fluidRow(
+                    class = "text-center",
                     actionButton(
                         ns("button_plot"),
                         label = "Show age distributions"
                     )
-                )),
+                ),
                 hr(),
                 helpText(
                     "Explore WGD events for each species. You can visualize", 
@@ -41,18 +41,17 @@ mod_wgd_by_species_ui <- function(id) {
                     width = 25,
                     icon = shiny::icon("download"),
                     fluidRow(
-                        column(
-                            7, selectInput(
-                                ns("tableformat"),
-                                label = "Choose file format:",
-                                choices = c(".tsv", ".tsv.gz")
-                            )
-                        ),
-                        column(
-                            5, 
-                            shiny::br(),
-                            downloadButton(ns("download_table"), label = "Download")
-                        )
+                        class = "text-center",
+                        column(9, offset = 2, selectInput(
+                            ns("tableformat"),
+                            label = "Choose file format:",
+                            choices = c(".tsv", ".tsv.gz"),
+                            width = "80%"
+                        ))
+                    ),
+                    fluidRow(
+                        class = "text-center",
+                        downloadButton(ns("download_table"), label = "Download")
                     )
                 )
             )
