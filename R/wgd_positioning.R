@@ -21,8 +21,8 @@
 get_nodepath_and_age <- function(tree, tip, node = 467) {
     
     # Get node paths and edge lengths
-    node_ids <- ape::nodepath(tree, which(tree$tip.label == tip), node)
-    node_len <- as.data.frame(cbind(tree$edge, tree$edge.length))
+    node_ids <- ape::nodepath(tree@phylo, which(tree@phylo$tip.label == tip), node)
+    node_len <- as.data.frame(cbind(tree@phylo$edge, tree@phylo$edge.length))
     
     # Keep only relevant nodes and add dates (cumulative sum of edge lengths)
     node_len <- node_len[node_len$V2 %in% node_ids, ]
