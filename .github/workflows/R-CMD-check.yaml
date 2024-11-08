@@ -24,6 +24,8 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
       R_KEEP_PKG_SOURCE: yes
 
     steps:
@@ -46,3 +48,8 @@ jobs:
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+          
+      - name: Test coverage
+        run: |
+          covr::codecov(coverage = covr::package_coverage(type = "all"))
+        shell: Rscript {0}
