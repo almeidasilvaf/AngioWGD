@@ -7,7 +7,7 @@ data(posterior_hist)
 
 # Start tests ----
 test_that("get_nodepath_and_age() returns a 3-column data frame", {
-    df <- get_nodepath_and_age(tree@phylo, "Glycine_max", 467)
+    df <- get_nodepath_and_age(tree, "Glycine_max", 467)
     
     expect_true(all.equal(names(df), c("from", "to", "age")))
     expect_equal(ncol(df), 3)
