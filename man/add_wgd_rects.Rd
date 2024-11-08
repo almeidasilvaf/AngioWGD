@@ -4,7 +4,7 @@
 \alias{add_wgd_rects}
 \title{Add rectangles indicating WGD events in a phylogenetic tree}
 \usage{
-add_wgd_rects(p, tree, wgd_dates, rh = 0.25, highlight = NULL)
+add_wgd_rects(p, tree, wgd_dates, rh = 0.25, highlight = NULL, method = "mrca")
 }
 \arguments{
 \item{p}{A `ggtree/ggplot` object containing a phylogenetic tree 
@@ -19,6 +19,10 @@ the plot in \strong{p}.}
 WGD events. Default: 0.15.}
 
 \item{highlight}{A character vector with IDs of WGD events to highlight.}
+
+\item{method}{Character indicating which method to use to position WGDs.
+One of 'mrca' (using MRCA of all species in variable \strong{full_species})
+or 'consensus_mean' (using consensus mean only). Default: 'mrca'.}
 }
 \value{
 A `ggtree` object.
@@ -32,7 +36,7 @@ data(species_metadata)
 data(wgd_dates)
 keep <- species_metadata[species_metadata$family == "Fabaceae", "latin_name"]
 
-ftree <- ape::keep.tip(tree, keep)
+ftree <- tidytree::keep.tip(tree, keep)
 
 p <- plot_timetree_rectangular(ftree, species_metadata)
 add_wgd_rects(p, ftree, wgd_dates, rh = 0.3)

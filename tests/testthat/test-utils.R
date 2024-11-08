@@ -7,7 +7,7 @@ data(posterior_hist)
 
 # Start tests ----
 test_that("get_nodepath_and_age() returns a 3-column data frame", {
-    df <- get_nodepath_and_age(tree, "Glycine_max", 467)
+    df <- get_nodepath_and_age(tree@phylo, "Glycine_max", 467)
     
     expect_true(all.equal(names(df), c("from", "to", "age")))
     expect_equal(ncol(df), 3)
@@ -24,8 +24,8 @@ test_that("find_column_name() returns a character scalar with column name", {
 test_that("subset_tree() returns a filtered version of a tree", {
     ftree <- subset_tree(tree, species_metadata, "Fabaceae")
     
-    expect_equal(class(ftree), "phylo")
-    expect_true(ftree$Nnode < tree$Nnode)
+    expect_true("treedata" %in% class(ftree))
+    expect_true(ftree@phylo$Nnode < tree@phylo$Nnode)
 })
 
 

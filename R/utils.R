@@ -1,39 +1,4 @@
 
-#' Get the node path from a tip of the tree to another node
-#'
-#' @param tree A `phylo` object with an ultrametric species tree.
-#' @param tip Character indicating the label of tr he tip to start from.
-#' @param node Numeric indicating the ID of the node where the path ends.
-#'
-#' @return A 3-column data frame with the following variables:
-#' \itemize{
-#'   \strong{from} numeric, node ID.
-#'   \strong{to} numeric, node ID.
-#'   \strong{age} numeric, node age (distance from the tip).
-#' }
-#'
-#' @importFrom ape nodepath
-#' @export
-#' @rdname get_nodepath_and_age
-#' @examples
-#' data(tree)
-#' df <- get_nodepath_and_age(tree, "Glycine_max", 467)
-get_nodepath_and_age <- function(tree, tip, node = 467) {
-    
-    # Get node paths and edge lengths
-    node_ids <- ape::nodepath(tree, which(tree$tip.label == tip), node)
-    node_len <- as.data.frame(cbind(tree$edge, tree$edge.length))
-    
-    # Keep only relevant nodes and add dates (cumulative sum of edge lengths)
-    node_len <- node_len[node_len$V2 %in% node_ids, ]
-    node_len <- node_len[match(node_len$V2, node_ids), ]
-    node_len$V3 <- cumsum(node_len$V3)
-    names(node_len) <- c("from", "to", "age")
-    
-    return(node_len)
-}
-
-
 #' Get name of metadata column containing an input clade
 #'
 #' @param metadata A data frame of species metadata with taxonomic information.
@@ -62,7 +27,7 @@ find_column_name <- function(metadata, clade) {
 #' @return A `phylo` object with a subset of the original tree.
 #' 
 #' @importFrom phangorn Descendants
-#' @importFrom ape keep.tip
+#' @importFrom tidytree keep.tip
 #' @rdname subset_tree
 #' @export
 #' @examples
@@ -79,11 +44,11 @@ subset_tree <- function(tree, metadata, clade) {
     # Select a suitable outgroup: the most closely-related clade
     ## For each node (from tip to root), get represented clades
     sample_sp <- clade_species[1]
-    path_to_root <- get_nodepath_and_age(tree, sample_sp, length(tree$tip.label) + 1)
+    path_to_root <- get_nodepath_and_age(tree@phylo, sample_sp, length(tree@phylo$tip.label) + 1)
     
     clades_per_node <- lapply(path_to_root$from, function(x) {
-        species_id <- phangorn::Descendants(tree, x, type = "tips")[[1]]
-        species <- tree$tip.label[species_id]
+        species_id <- phangorn::Descendants(tree@phylo, x, type = "tips")[[1]]
+        species <- tree@phylo$tip.label[species_id]
         included_clades <- metadata[metadata$latin_name %in% species, col_name]
         included_clades <- unique(included_clades)
         
@@ -97,8 +62,8 @@ subset_tree <- function(tree, metadata, clade) {
     outgroup_species <- metadata[metadata[[col_name]] == outgroup, "latin_name"]
     
     # Subset tree
-    final_tree <- ape::keep.tip(tree, c(clade_species, outgroup_species))
-    
+    final_tree <- tidytree::keep.tip(tree, c(clade_species, outgroup_species))
+
     return(final_tree)
 }
 

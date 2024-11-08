@@ -54,6 +54,8 @@
 #'   \item{consensus_mean}{Numeric, mean of the consensus distribution of
 #'   WGD ages.}
 #'   \item{x90_percent_hcr}{Character, range with 90\% HCR.}
+#'   \item{full_species}{Character with the names of all species sharing that 
+#'   WGD in their history.}
 #' }
 #'
 #' @examples

@@ -242,7 +242,7 @@
   },
   "output": {
     "citation_text": {
-      "html": "<p style=\"color: #333; text-align: justify; margin-inline-start: 10px; margin-inline-end: 10px;\">\n  <strong>Citation:<\/strong>\n<\/p>\n<p style=\"color: #333; text-align: justify; margin-inline-start: 10px; margin-inline-end: 10px;\">\n  Chen H, Almeida-Silva F, Logghe G, Bonte D, Van de Peer Y. (2024). The rise of polyploids during environmental catastrophes.\n  <em>bioRxiv.<\/em>\n<\/p>",
+      "html": "<p style=\"color: #333; text-align: justify; margin-inline-start: 10px; margin-inline-end: 10px;\">\n  <strong>Citation:<\/strong>\n<\/p>\n<p style=\"color: #333; text-align: justify; margin-inline-start: 10px; margin-inline-end: 10px;\">\n  Chen H, Almeida-Silva F, Logghe G, Bonte D, Van de Peer Y (2024). The rise of polyploids during environmental catastrophes.\n  <em>bioRxiv.<\/em>\n<\/p>",
       "deps": [
 
       ]

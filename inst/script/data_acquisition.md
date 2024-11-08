@@ -30,8 +30,7 @@ wgd_dates <- read_tsv(
     show_col_types = FALSE
 ) |>
     janitor::clean_names() |>
-    as.data.frame() |>
-    dplyr::select(-full_species)
+    as.data.frame()
 
 usethis::use_data(wgd_dates, compress = "xz", overwrite = TRUE)
 ```
@@ -42,8 +41,14 @@ This is an object of class `phylo` with a phylogenetic tree for all
 species in the database.
 
 ``` r
-tree <- read.tree(here("inst", "extdata", "tree.nw"))
-tree$edge.length <- tree$edge.length * 100
+# Load tree and fix scale of dates
+tree <- treeio::read.mcmctree(here("inst", "extdata", "FigTree.tre"))
+tree@phylo$edge.length <- tree@phylo$edge.length * 100 
+hpd95 <- lapply(tree@data$`0.95HPD`, function(x) {
+    range <- as.numeric(x) * 100
+    return(range)
+})
+tree@data$length_95_HPD <- hpd95
 
 usethis::use_data(tree, compress = "xz", overwrite = TRUE)
 ```
@@ -316,6 +321,16 @@ posterior_hist <- lapply(posterior_hist, as.data.frame)
 
 # Save data
 usethis::use_data(posterior_hist, compress = "xz", overwrite = TRUE)
+```
+
+## periods.rda
+
+Same as in `deeptime::periods`.
+
+``` r
+periods <- deeptime::periods
+
+usethis::use_data(periods, compress = "xz")
 ```
 
 # Data in `inst/extdata/`

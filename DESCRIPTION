@@ -37,6 +37,7 @@ Imports:
     geomtextpath (>= 0.1.4),
     grid,
     ape,
+    tidytree,
     phangorn,
     shinyWidgets (>= 0.8.6),
     stats,

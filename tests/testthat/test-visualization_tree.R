@@ -20,7 +20,7 @@ test_that("plot_timetree_rectangular() returns a ggplot object", {
 
 test_that("add_wgd_rectangles() returns a ggplot object", {
     keep <- species_metadata[species_metadata$family == "Fabaceae", "latin_name"]
-    ftree <- ape::keep.tip(tree, keep)
+    ftree <- tidytree::keep.tip(tree, keep)
     p <- plot_timetree_rectangular(ftree, species_metadata)
     p <- add_wgd_rects(p, ftree, wgd_dates, rh = 0.3, highlight = "PAPI")
     

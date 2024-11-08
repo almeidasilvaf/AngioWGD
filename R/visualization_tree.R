@@ -14,7 +14,7 @@
 #' 
 #' @return A `ggtree` object with a phylogenetic tree visualization.
 #' 
-#' @importFrom ggtree ggtree %<+% geom_tippoint revts
+#' @importFrom ggtree ggtree %<+% geom_tippoint revts geom_range
 #' @importFrom ggplot2 scale_y_continuous scale_x_continuous theme_minimal
 #' expansion guide_axis_stack scale_y_continuous labs scale_color_manual
 #' guide_axis theme_classic
@@ -38,7 +38,7 @@ plot_timetree_circular <- function(
 ) {
     
     color_by <- tree_taxon_auto(tree, metadata)
-    xmin <- round(max(ape::node.depth.edgelength(tree)) + 20, -1)
+    xmin <- round(max(ape::node.depth.edgelength(tree@phylo)) + 20, -1)
     
     # Define period boundaries and colors
     age_breaks <- c(201.4, 145.0, 66.0, 23.03)
@@ -68,7 +68,8 @@ plot_timetree_circular <- function(
         scale_y_continuous(guide = NULL, expand = expansion(mult = c(0.005, 0.01))) +
         theme_classic() +
         geom_tippoint(aes(color = .data[[color_by]])) +
-        labs(color = "Clade")
+        labs(color = "Clade") +
+        geom_range(range = 'length_95_HPD', color = "cornflowerblue", alpha = 0.4)
     
     # Choose color palette based on number of levels
     pal <- c(
@@ -132,7 +133,7 @@ plot_timetree_rectangular <- function(
     
     color_by <- tree_taxon_auto(tree, metadata)
     age_breaks <- c(300, 201.4, 145.0, 66.0, 23.03)
-    xmin <- round(max(ape::node.depth.edgelength(tree)) + 20, -1)
+    xmin <- round(max(ape::node.depth.edgelength(tree@phylo)) + 20, -1)
     
     # Get circular tree with chronostratigraphic info
     p <- revts(ggtree(tree)) %<+% metadata +
@@ -153,7 +154,8 @@ plot_timetree_rectangular <- function(
             labels = format(age_breaks, drop0trailing = FALSE)
         ) +
         ggtree::theme_tree2() +
-        labs(color = "Clade")
+        labs(color = "Clade") +
+        geom_range(range = 'length_95_HPD', color = "cornflowerblue", alpha = 0.4)
     
     # Choose color palette based on number of levels
     pal <- c(
@@ -185,6 +187,9 @@ plot_timetree_rectangular <- function(
 #' @param rh Numeric indicating the height of the rectangles representing
 #' WGD events. Default: 0.15.
 #' @param highlight A character vector with IDs of WGD events to highlight.
+#' @param method Character indicating which method to use to position WGDs.
+#' One of 'mrca' (using MRCA of all species in variable \strong{full_species})
+#' or 'consensus_mean' (using consensus mean only). Default: 'mrca'.
 #'
 #' @return A `ggtree` object.
 #' 
@@ -197,45 +202,30 @@ plot_timetree_rectangular <- function(
 #' data(wgd_dates)
 #' keep <- species_metadata[species_metadata$family == "Fabaceae", "latin_name"]
 #' 
-#' ftree <- ape::keep.tip(tree, keep)
-#'
+#' ftree <- tidytree::keep.tip(tree, keep)
+#' 
 #' p <- plot_timetree_rectangular(ftree, species_metadata)
 #' add_wgd_rects(p, ftree, wgd_dates, rh = 0.3)
 #'
-add_wgd_rects <- function(p, tree, wgd_dates, rh = 0.25, highlight = NULL) {
+add_wgd_rects <- function(
+        p, tree, wgd_dates, rh = 0.25, highlight = NULL, method = 'mrca'
+) {
     
     # Get ID of root node
-    root_id <- length(tree$tip.label) + 1
+    root_id <- length(tree@phylo$tip.label) + 1
     
     # Keep only species in the tree
-    wgd_dates <- wgd_dates[wgd_dates$species %in% tree$tip.label, ]
+    wgd_dates <- wgd_dates[wgd_dates$species %in% tree@phylo$tip.label, ]
     
     if(nrow(wgd_dates) >0) {
         
+        divergent <- c(
+            "POAC", "POAL", "DIOS", "PASE b", "CALY", "LARD", "TROC a", 
+            "NEOL", "SALV", "PASS", "MANG", "POZO", "AESC"
+        )
+        
         # Create a data frame with node ID, WGD ID, and rectangle x coordinates
-        wgds <- wgd_dates[!duplicated(wgd_dates$wgd_id), ]
-        rect <- Reduce(rbind, lapply(seq_len(nrow(wgds)), function(x) {
-            
-            mu <- wgds$consensus_mean[x]
-            hcr_min <- as.numeric(gsub("-.*", "", wgds$x90_percent_hcr[x]))
-            hcr_max <- as.numeric(gsub(".*-", "", wgds$x90_percent_hcr[x]))
-            sp <- wgds$species[x]
-            
-            path <- get_nodepath_and_age(tree, sp, root_id)
-            idx <- min(which(path$age >= mu)) - 1
-            node <- path[idx, "from"]
-            
-            # For species-specific WGDs
-            if(idx == 0) { node <- path[1, "to"] }
-            df <- data.frame(
-                node = node, 
-                wgd_id = wgds$wgd_id[x],
-                xmin = -hcr_min, 
-                xmax = -hcr_max
-            )
-            
-            return(df)
-        }))
+        rect <- position_wgd(tree, wgd_dates, method = method)
         
         # Add y axis coordinates (fixed)
         rect_coord <- as.data.frame(merge(p$data, rect))
@@ -252,7 +242,11 @@ add_wgd_rects <- function(p, tree, wgd_dates, rh = 0.25, highlight = NULL) {
                     bg <- make_gradient_fill(rect_coord$xmax[i], rect_coord$xmin[i])
                 }
             } else {
-                bg <- make_gradient_fill(rect_coord$xmax[i], rect_coord$xmin[i])
+                if(rect_coord$wgd_id[i] %in% divergent) {
+                    bg <- make_gradient_fill(rect_coord$xmax[i], rect_coord$xmin[i], color = "darkorange3")
+                } else {
+                    bg <- make_gradient_fill(rect_coord$xmax[i], rect_coord$xmin[i])
+                }
             }
             
             p <- p + geom_rect(
@@ -279,7 +273,7 @@ add_wgd_rects <- function(p, tree, wgd_dates, rh = 0.25, highlight = NULL) {
 tree_taxon_auto <- function(tree, metadata) {
     
     # Count number of levels per taxon
-    fmeta <- metadata[metadata$latin_name %in% tree$tip.label, ]
+    fmeta <- metadata[metadata$latin_name %in% tree@phylo$tip.label, ]
     tcount <- apply(fmeta[, c("family", "order", "taxonomy_3")], 2, function(x) length(unique(x)))
     
     # Choose first taxon with <20 levels

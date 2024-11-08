@@ -139,6 +139,10 @@ mod_explore_wgd_events_ui <- function(id) {
                 ),
                 hr(),
                 helpText(
+                    "Note: dates of WGDs marked in orange (N = 13) are discordant with",
+                    "their expected phylogenetic locations, probably due to",
+                    "shifts in substitution rates. See FAQ for more details",
+                    "on how WGDs are positioned in nodes of the tree."
                 )
             ),
             ## Add box to contain DT DataTable with WGD ages
@@ -228,7 +232,7 @@ mod_explore_wgd_events_server <- function(id) {
         
         # Number of species
         nspecies <- reactive({
-            n <- length(final_tree()$tip.label)
+            n <- length(final_tree()@phylo$tip.label)
             n
         })
         
