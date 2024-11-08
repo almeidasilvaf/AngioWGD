@@ -7,6 +7,9 @@
 
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![Codecov test
+coverage](https://codecov.io/gh/almeidasilvaf/AngioWGD/branch/main/graph/badge.svg)](https://app.codecov.io/gh/almeidasilvaf/AngioWGD?branch=main)
+[![R-CMD-check](https://github.com/almeidasilvaf/AngioWGD/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/almeidasilvaf/AngioWGD/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 **AngioWGD** is an R package that contains a Shiny app where users can
