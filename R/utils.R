@@ -44,7 +44,7 @@ subset_tree <- function(tree, metadata, clade) {
     # Select a suitable outgroup: the most closely-related clade
     ## For each node (from tip to root), get represented clades
     sample_sp <- clade_species[1]
-    path_to_root <- get_nodepath_and_age(tree@phylo, sample_sp, length(tree@phylo$tip.label) + 1)
+    path_to_root <- get_nodepath_and_age(tree, sample_sp, length(tree@phylo$tip.label) + 1)
     
     clades_per_node <- lapply(path_to_root$from, function(x) {
         species_id <- phangorn::Descendants(tree@phylo, x, type = "tips")[[1]]
