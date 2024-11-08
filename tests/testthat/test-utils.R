@@ -13,6 +13,12 @@ test_that("get_nodepath_and_age() returns a 3-column data frame", {
     expect_equal(ncol(df), 3)
 })
 
+test_that("position_wgd() returns coordinates", {
+    pwgd <- position_wgd(tree, wgd_dates, method = "consensus_mean")
+    
+    expect_equal(class(pwgd), "data.frame")
+})
+
 
 test_that("find_column_name() returns a character scalar with column name", {
     cn <- find_column_name(species_metadata, "Poales")

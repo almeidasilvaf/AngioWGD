@@ -60,7 +60,7 @@ position_wgd <- function(tree, wgd_dates, method = "mrca") {
         
         if(method == "consensus_mean") {
             sp <- wgds$species[x]
-            path <- get_nodepath_and_age(tree@phylo, sp, root_id)
+            path <- get_nodepath_and_age(tree, sp, root_id)
             idx <- min(which(path$age >= mu)) - 1
             node <- path[idx, "from"]
             
