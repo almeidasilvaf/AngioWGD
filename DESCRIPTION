@@ -1,6 +1,6 @@
 Package: AngioWGD
 Title: A Shiny app to explore whole-genome duplication events in angiosperms
-Version: 0.99.0
+Version: 1.0.1
 Authors@R: 
     c(
         person(
