@@ -53,7 +53,6 @@ position_wgd <- function(tree, wgd_dates, method = "mrca") {
     # Create a data frame with node ID, WGD ID, and rectangle x coordinates
     wgds <- wgd_dates[!duplicated(wgd_dates$wgd_id), ]
     rect <- Reduce(rbind, lapply(seq_len(nrow(wgds)), function(x) {
-        
         mu <- wgds$consensus_mean[x]
         hcr_min <- as.numeric(gsub("-.*", "", wgds$x90_percent_hcr[x]))
         hcr_max <- as.numeric(gsub(".*-", "", wgds$x90_percent_hcr[x]))
@@ -69,19 +68,25 @@ position_wgd <- function(tree, wgd_dates, method = "mrca") {
             
         } else if(method == "mrca") {
             sps <- unique(unlist(strsplit(wgds$full_species[x], ", ")))
-            node <- ape::getMRCA(tree@phylo, sps)
+            node <- NA
+            if(all(sps %in% tree@phylo$tip.label)) {
+                node <- ape::getMRCA(tree@phylo, sps)
+            }
             if(is.null(node)) { node <- which(tree@phylo$tip.label == sps) }
         } else {
             stop("Invalid method.")
         }
 
-        df <- data.frame(
-            node = node, 
-            wgd_id = wgds$wgd_id[x],
-            xmin = -hcr_min, 
-            xmax = -hcr_max
-        )
-        
+        df <- NULL
+        if(!is.na(node)) {
+            df <- data.frame(
+                node = node, 
+                wgd_id = wgds$wgd_id[x],
+                xmin = -hcr_min, 
+                xmax = -hcr_max
+            )
+        }
+
         return(df)
     }))
     
