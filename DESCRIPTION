@@ -54,8 +54,7 @@ Imports:
     rlang (>= 1.1.4),
     shinycssloaders (>= 1.0.0),
     htmltools (>= 0.5.8.1),
-    shinyjs (>= 2.1.0),
-    metathis (>= 1.1.4)
+    shinyjs (>= 2.1.0)
 Encoding: UTF-8
 LazyData: true
 LazyDataCompression: xz

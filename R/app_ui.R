@@ -8,7 +8,6 @@
 #' @importFrom htmltools includeMarkdown
 #' @importFrom shinydashboardPlus dashboardSidebar
 #' @importFrom shinyjs useShinyjs
-#' @importFrom metathis meta meta_description meta_social meta_viewport
 #' @noRd
 app_ui <- function(request) {
     shiny::tagList(
