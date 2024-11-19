@@ -7,14 +7,18 @@ data(wgd_dates)
 # Start tests ----
 test_that("plot_timetree_circular() returns a ggplot object", {
     p <- plot_timetree_circular(tree, species_metadata, add_labels = TRUE)
+    p2 <- plot_itimetree_circular(tree, species_metadata, add_labels = TRUE)
     
     expect_true("ggplot" %in% class(p))
+    expect_true("ggplot" %in% class(p2))
 })
 
 test_that("plot_timetree_rectangular() returns a ggplot object", {
     p <- plot_timetree_rectangular(tree, species_metadata, add_labels = TRUE)
+    p2 <- plot_itimetree_rectangular(tree, species_metadata, add_labels = TRUE)
     
     expect_true("ggplot" %in% class(p))
+    expect_true("ggplot" %in% class(p2))
 })
 
 
