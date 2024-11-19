@@ -14,7 +14,8 @@
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom shinyWidgets radioGroupButtons switchInput
 #' @importFrom DT dataTableOutput 
-mod_explore_wgd_events_ui <- function(id) {
+#' @importFrom ggiraph girafeOutput
+mod_explore_wgds_ui <- function(id) {
     
     ns <- NS(id)
     tagList(
@@ -27,7 +28,7 @@ mod_explore_wgd_events_ui <- function(id) {
                 shinydashboardPlus::box(
                     status = "success",
                     solidHeader = TRUE, title = "Query options",
-                    ## Row 1 of the box: dropdown button to select part(s)
+                    ## Row 1 of the box: dropdown button to select clade
                     fluidRow(
                         column(
                             12, offset = 0,
@@ -38,7 +39,7 @@ mod_explore_wgd_events_ui <- function(id) {
                             )
                         )
                     ),
-                    ## Row 2
+                    ## Row 2: switch button to select tree layout
                     fluidRow(
                         column(
                             12, offset = 0,
@@ -51,17 +52,32 @@ mod_explore_wgd_events_ui <- function(id) {
                             )
                         )
                     ),
+                    ## Row 3: switch button to select if labels must be shown
+                    fluidRow(
+                        column(
+                            12, offset = 0,
+                            shinyWidgets::radioGroupButtons(
+                                inputId = ns("show_tiplabel"),
+                                label = "Tip (species) labels", 
+                                choices = c("Hide", "Show"),
+                                status = "primary",
+                                justified = TRUE,
+                                selected = "Hide"
+                            )
+                        )
+                    ),
                     # add button "Show advanced options" to show extra options when clicking
                     # Extra options: "Highlight age range:" - sliderInput like SEA to choose min and max
-                    
                     fluidRow(
                         column(
                             12, offset = 0,
                             a(id = ns("show_advanced"), "Show/hide advanced options", href = "#"),
                             shinyjs::hidden(
+                                # Div area containing advanced options
                                 div(
                                     id = ns("advanced"),
                                     div(style = "display: flex; align-items: center;",
+                                        # Option 1: age range
                                         column(
                                             9, offset = 0,
                                             sliderInput(
@@ -77,32 +93,35 @@ mod_explore_wgd_events_ui <- function(id) {
                                                 size = "small"
                                             )
                                         )
-                                    ),
-                                    fluidRow(
-                                        column(
-                                            12, offset = 0,
-                                            shinyWidgets::radioGroupButtons(
-                                                inputId = ns("show_tiplabel"),
-                                                label = "Tip (species) labels", 
-                                                choices = c("Hide", "Show"),
-                                                status = "primary",
-                                                justified = TRUE,
-                                                selected = "Hide"
-                                            )
-                                        )
                                     )
+                                )
                             )
-                            )
+                        )
                     )
                 )
-            ))
+            )
         ),
         fluidRow(
             # Create a box to contain the tree -----------------------
             shinydashboardPlus::box(
                 solidHeader = TRUE,
                 title = "Phylogenetic tree with WGD events",
-                status = "success", width = 7,
+                status = "success", width = 12, 
+                withSpinner(
+                    ggiraph::girafeOutput(
+                        ns("tree_viz"),
+                        height = "700px"
+                    ),
+                    color = "#276c4c"
+                ),
+                hr(),
+                helpText(
+                    "Note: dates of WGDs marked in orange (N = 13) are discordant with",
+                    "their expected phylogenetic locations, probably due to",
+                    "shifts in substitution rates. See FAQ for more details",
+                    "on how WGDs are positioned in nodes of the tree.",
+                    "Use the toolbar on top of the plot to activate pan/zoom."
+                ),
                 sidebar = shinydashboardPlus::boxSidebar(
                     id = ns("treeviz_sidebar"),
                     width = 25,
@@ -132,24 +151,15 @@ mod_explore_wgd_events_ui <- function(id) {
                         class = "text-center",
                         downloadButton(ns("download_fig"), label = "Download")
                     )
-                ),
-                withSpinner(
-                    shiny::plotOutput(ns("tree_viz"), height = "800px"),
-                    color = "#276c4c"
-                ),
-                hr(),
-                helpText(
-                    "Note: dates of WGDs marked in orange (N = 13) are discordant with",
-                    "their expected phylogenetic locations, probably due to",
-                    "shifts in substitution rates. See FAQ for more details",
-                    "on how WGDs are positioned in nodes of the tree."
                 )
-            ),
+            )
+        ),
+        fluidRow(
             ## Add box to contain DT DataTable with WGD ages
             shinydashboardPlus::box(
                 solidHeader = TRUE,
                 title = "WGD ages",
-                status = "success", width = 5,
+                status = "success", width = 12,
                 withSpinner(
                     DT::dataTableOutput(ns("wgd_table")),
                     color = "#276c4c"
@@ -195,12 +205,10 @@ mod_explore_wgd_events_ui <- function(id) {
 #' geom_bar element_blank coord_radial
 #' @importFrom stats median
 #' @importFrom shinyjs onclick toggle toggleState
-mod_explore_wgd_events_server <- function(id) {
+#' @importFrom ggiraph renderGirafe girafe opts_zoom
+mod_explore_wgds_server <- function(id) {
     
     moduleServer(id, function(input, output, session) {
-        
-        requireNamespace("ggplot2")
-        
         ns <- session$ns
         
         # Update selectizeInput() with clade name ----
@@ -211,7 +219,6 @@ mod_explore_wgd_events_server <- function(id) {
             selected = "All"
         )
     
-            
         shinyjs::onclick(
             "show_advanced",
             shinyjs::toggle(id = "advanced", anim = TRUE)
@@ -240,8 +247,11 @@ mod_explore_wgd_events_server <- function(id) {
         es <- reactive({
             
             ylim <- c(-0.5, NA)
-            label_size <- 1.4
-            if(nspecies() <100 & nspecies() >50) {
+            label_size <- 1
+            if(nspecies() >=100 & nspecies() < 150) {
+                label_size <- 1.5
+                height <- 0.5
+            } else if(nspecies() <100 & nspecies() >50) {
                 height <- 0.35
                 label_size <- 3
             } else if(nspecies() <50 & nspecies() >10) {
@@ -269,17 +279,18 @@ mod_explore_wgd_events_server <- function(id) {
         
         # ggplot object with tree + WGD events in a reactive object
         treeplot <- reactive({
+
             lab <- ifelse(input$show_tiplabel == "Show", TRUE, FALSE)
     
             if(input$layout == "Circular") {
-                p <- plot_timetree_circular(
+                p <- plot_itimetree_circular(
                     final_tree(),
                     metadata = species_metadata, 
                     add_labels = lab,
                     label_size = es()$label_size
-                )
+                ) 
             } else {
-                p <- plot_timetree_rectangular(
+                p <- plot_itimetree_rectangular(
                     final_tree(),
                     metadata = species_metadata,
                     add_labels = lab,
@@ -290,7 +301,7 @@ mod_explore_wgd_events_server <- function(id) {
             }
             
             # Add WGD rectangles
-            p <- add_wgd_rects(
+            p <- add_iwgd_rects(
                 p, final_tree(), wgd_dates, rh = es()$rh, 
                 highlight = selected_wgds()
             )
@@ -316,9 +327,21 @@ mod_explore_wgd_events_server <- function(id) {
         
         # Render UI elements ----
         ## Render plot with phylogenetic tree
-        output$tree_viz <- renderPlot({
-            treeplot()
-        }, res = 96)
+        output$tree_viz <- ggiraph::renderGirafe({
+            
+            girafe(
+                ggobj = treeplot(),
+                width_svg = 12,
+                height_svg = 9,
+                options = list(
+                    ggiraph::opts_zoom(min = 1, max = 4),
+                    ggiraph::opts_toolbar(
+                        hidden = c("lasso_select", "lasso_deselect"),
+                        position = "top"
+                    )
+                )
+            )
+        })
         
         ## Render interactive table with WGD dates
         output$wgd_table <- DT::renderDataTable({
@@ -380,12 +403,11 @@ mod_explore_wgd_events_server <- function(id) {
             }
         )
         
-        
     })
 }
 
 ## To be copied in the UI
-# mod_explore_wgd_events_ui("explore_wgd_events_ui_1")
+# mod_explore_wgds_ui("explore_wgds_1")
     
 ## To be copied in the server
-# mod_explore_wgd_events_server("explore_wgd_events_ui_1")
+# mod_explore_wgds_server("explore_wgds_1")

@@ -139,8 +139,14 @@ subset_wgd_per_clade <- function(wgd_table, metadata, clade) {
     
     # Keep only unique WGD events and select meaningful columns
     cols <- setNames(
-        c("wgd_id", "phylogenetic_location", "consensus_peak", "consensus_mean", "x90_percent_hcr"),
-        c("WGD ID", "Location", "Consensus Peak", "Consensus Mean", "`90% HCR`")
+        c(
+            "wgd_id", "phylogenetic_location", "consensus_peak", "consensus_mean", 
+            "x90_percent_hcr", "full_species"
+        ),
+        c(
+            "WGD ID", "Location", "Consensus Peak", "Consensus Mean", 
+            "`90% HCR`", "Shared by"
+        )
     )
     wgd_df <- wgd_df[!duplicated(wgd_df$wgd_id), cols]
     names(wgd_df) <- names(cols)

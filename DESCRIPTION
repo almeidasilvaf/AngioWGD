@@ -45,6 +45,7 @@ Imports:
     grDevices,
     DT (>= 0.33),
     ggplot2 (>= 3.5.1),
+    ggiraph,
     scales,
     patchwork,
     golem (>= 0.3.1),

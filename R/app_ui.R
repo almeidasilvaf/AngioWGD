@@ -67,7 +67,7 @@ app_ui <- function(request) {
                     shinydashboard::tabItem(
                         "tab_wgds",
                         tags$h3("WGDs across the angiosperm phylogeny", class = "title-header"),
-                        mod_explore_wgd_events_ui("explore_wgd_events_ui_1")
+                        mod_explore_wgds_ui("explore_wgds_1")
                     ),
                     # Frontpage - tab_species ----------------------------------
                     shinydashboard::tabItem(

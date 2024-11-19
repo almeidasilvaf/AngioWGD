@@ -15,7 +15,7 @@ app_server <- function(input, output, session) {
         }
     })
     
-    mod_explore_wgd_events_server("explore_wgd_events_ui_1")
+    mod_explore_wgds_server("explore_wgds_1")
     mod_wgd_by_species_server("wgd_by_species_1")
     mod_original_data_server("original_data_1")
     
