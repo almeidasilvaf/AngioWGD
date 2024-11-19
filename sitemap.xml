@@ -4,6 +4,7 @@
 <url><loc>/authors.html</loc></url>
 <url><loc>/index.html</loc></url>
 <url><loc>/news/index.html</loc></url>
+<url><loc>/reference/add_iwgd_rects.html</loc></url>
 <url><loc>/reference/add_wgd_rects.html</loc></url>
 <url><loc>/reference/available_clades.html</loc></url>
 <url><loc>/reference/data_urls.html</loc></url>
@@ -12,6 +13,8 @@
 <url><loc>/reference/periods.html</loc></url>
 <url><loc>/reference/plot_age_distro.html</loc></url>
 <url><loc>/reference/plot_consensus_age_distro.html</loc></url>
+<url><loc>/reference/plot_itimetree_circular.html</loc></url>
+<url><loc>/reference/plot_itimetree_rectangular.html</loc></url>
 <url><loc>/reference/plot_timetree_circular.html</loc></url>
 <url><loc>/reference/plot_timetree_rectangular.html</loc></url>
 <url><loc>/reference/posterior_hist.html</loc></url>
